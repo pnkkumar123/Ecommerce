@@ -2,6 +2,8 @@ import express from 'express'
 import mongoose from 'mongoose'
 import dotenv from 'dotenv'
 import createProduct from './routes/createProduct.js'
+import cors from 'cors';
+
 
 dotenv.config()
 
@@ -13,6 +15,7 @@ mongoose.connect(process.env.MONGODB_URI)
 })
 
 const app = express();
+app.use(cors())
 app.use(express.json())
 app.listen("5000",()=>{
     console.log("port listed");
