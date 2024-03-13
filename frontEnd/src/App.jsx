@@ -5,6 +5,7 @@ import DashBorad from './AdminComponents/DashBorad'
 import UploadProducts from './AdminComponents/uploadProducts'
 import Products from './ConsumerComponents/Products'
 import SignUp from './AdminComponents/SignUp'
+import SignIn from './AdminComponents/SignIn'
 
 function App() {
   
@@ -13,6 +14,7 @@ function App() {
     <>
     <Navbar/>
     <Routes>
+        <Route path='/signin' element={<SignIn/>}/>
         <Route path='/signup' element={<SignUp/>}/>
       <Route path='/dashboard' element={<DashBorad/>}/>
      <Route path='/uploadproducts' element={<UploadProducts/>}/>
