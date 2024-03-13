@@ -1,11 +1,11 @@
 import express from 'express';
 import Seller from '../models/Seller.js';
 import bcryptjs from 'bcryptjs'
-
+import jwt from 'jsonwebtoken'
 
 const route = express.Router();
 
-route.post("/signup",async (req,res)=>{
+route.post("/signup",async (req,res,next)=>{
     const {userName,email,name,password} = req.body;
      try {
       const existingUser = await Seller.findOne({$or:[{email},{userName}]});
@@ -28,6 +28,30 @@ route.post("/signup",async (req,res)=>{
         console.log(error);
         return res.status(401).json({error:"Error occured while saving data"})
      }
+
+})
+route.post("/signin",async(req,res,next)=>{
+  const {email,password} = req.body;
+  try{
+    const validUser = await Seller.findOne({email})
+  if(!validUser){
+    return next(console.log("error"))
+  }
+  const validPassword = bcryptjs.compareSync(password,validUser.password)
+  if(!validPassword){
+    return next (console.log("wrong crendential"));
+  }
+  const {password:hashedPassword,...rest} = validUser._doc;
+  const token = jwt.sign({id:validUser._id},process.env.JWT_SECRET)
+  const age = new Date(Date.now()+3600000);
+  res.cookie('access_token',token,{httpOnly:true,expires:age},
+  
+  ).status(200)
+  .json(rest)
+  }catch(e){
+    next(e)
+  }
+
 
 })
 export default route
