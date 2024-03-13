@@ -22,6 +22,9 @@ const Navbar = () => {
           <NavLink to="/uploadproducts" className="text-white">
             <Button color="inherit">Upload Products</Button>
           </NavLink>
+          <NavLink to="/products" className="text-white">
+            <Button color="inherit">Products</Button>
+          </NavLink>
         </div>
       </Toolbar>
     </AppBar>

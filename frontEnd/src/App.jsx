@@ -3,6 +3,7 @@ import Navbar from './AdminComponents/Navbar'
 import DashBorad from './AdminComponents/DashBorad'
 
 import UploadProducts from './AdminComponents/uploadProducts'
+import Products from './ConsumerComponents/Products'
 
 function App() {
   
@@ -13,6 +14,7 @@ function App() {
     <Routes>
       <Route path='/dashboard' element={<DashBorad/>}/>
      <Route path='/uploadproducts' element={<UploadProducts/>}/>
+     <Route path='/products' element={<Products/>}/>
     </Routes>
     </>
   )

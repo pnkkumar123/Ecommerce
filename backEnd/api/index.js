@@ -2,6 +2,7 @@ import express from 'express'
 import mongoose from 'mongoose'
 import dotenv from 'dotenv'
 import createProduct from './routes/createProduct.js'
+import Auth from './routes/Auth.js'
 import cors from 'cors';
 
 
@@ -21,3 +22,4 @@ app.listen("5000",()=>{
     console.log("port listed");
 })
 app.use("/createProduct",createProduct)
+app.use("/Auth",Auth)

@@ -1,12 +1,19 @@
 import { configureStore } from '@reduxjs/toolkit';
-import ProductReducer from '../slice/ProductSlice'; // Import your reducer(s) here
+// import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { ProductApi } from '../slice/ProductSlice'; // Import your API definition
 
 const store = configureStore({
   reducer: {
-    product: ProductReducer, // Assuming ProductReducer is your reducer
-    // Add other reducers if you have them
+    // Include the generated reducer from the API
+    [ProductApi.reducerPath]: ProductApi.reducer,
   },
-  // Additional store configurations can be added here
+  // Include the middleware for API requests
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(ProductApi.middleware),
 });
 
 export default store;
+
+// Export any additional hooks or functions you might need
+export const { useGetProductQuery } = ProductApi;
+
