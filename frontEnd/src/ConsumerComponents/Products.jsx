@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { useGetProductQuery } from '../redux/slice/ProductSlice';
 import { Grid, Card, CardMedia, CardContent, Typography, Button, Chip } from '@mui/material';
 
@@ -17,9 +18,10 @@ function Products() {
             <Grid   container spacing={2} alignItems="stretch">
                 {data.products.map((product) => {
                     console.log(product);
-                    const { productName, photo, description, price, category, brand, quantityAvailable, color, size } = product;
+                    const {_id, productName, photo, description, price, category, brand, quantityAvailable, color, size } = product;
                     return (
                         <Grid  item xs={12} sm={6} md={3} key={product._id}>
+                         <Link to={`/products/${product._id}`} style={{textDecoration:'none'}}>
                             <Card >
                                 <CardMedia
                                     component="img"
@@ -57,6 +59,7 @@ function Products() {
                                     </Button>
                                 </CardContent>
                             </Card>
+                            </Link>
                         </Grid>
                     );
                 })}
