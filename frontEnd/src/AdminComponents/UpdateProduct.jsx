@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { TextField, InputLabel, Button, CircularProgress } from '@mui/material';
 import { useGetProductIdQuery, useUpdateProductMutation } from '../redux/slice/ProductSlice';
-import { Link, NavLink, useParams } from 'react-router-dom';
+import { Link, NavLink, useParams ,useNavigate} from 'react-router-dom';
 
 function UpdateProduct() {
+    const navigate = useNavigate()
     const { productId } = useParams();
     const { data } = useGetProductIdQuery(productId);
 
@@ -22,6 +23,7 @@ function UpdateProduct() {
 
     // State to manage loading state
     const [uploading, setUploading] = useState(false);
+    const [url, setUrl] = useState("")
 
     // Mutation hook to update product
     const [updateProduct, { isLoading }] = useUpdateProductMutation();
@@ -38,7 +40,7 @@ function UpdateProduct() {
                 quantityAvailable: data.product.quantityAvailable || '',
                 color: data.product.color || '',
                 size: data.product.size || '',
-                photo: '' // Assuming photo is not editable in this form
+                photo: data.product.photo
             });
         }
     }, [data]);
@@ -46,13 +48,39 @@ function UpdateProduct() {
     // Handle form field changes
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.id]: e.target.value });
+     if (e.target.id !== 'photo') {
+        setFormData({ ...formData, [e.target.id]: e.target.value });
+    }
     };
-
+  
     // Handle file input change
     const handleFileChange = (e) => {
-        const file = e.target.files[0];
-        setFormData({ ...formData, photo: file });
+        setUploading(true);
+        // create a new FormData object
+        const data = new FormData();
+        data.append("file",e.target.files[0]);
+        data.append("upload_preset","insta-clone");
+        data.append("cloud_name","pankajcloud420")
+        
+        // perform file upload logic
+        fetch("https://api.cloudinary.com/v1_1/pankajcloud420/image/upload",{
+            method:"post",
+            body:data
+        })
+        .then(response=>response.json())
+        .then(data=>{
+            const imageUrl = data.url;
+            console.log(imageUrl);
+            setFormData({ ...formData, photo: imageUrl });
+            setUploading(false)
+
+        })
+        .catch(error=>{
+            console.log(error);
+            setUploading(false)
+        })
     };
+    
 
     // Handle form submission
     const handleSubmit = async (e) => {
@@ -62,6 +90,7 @@ function UpdateProduct() {
             const response = await updateProduct({ productId, formData });
             console.log(response);
             setUploading(false);
+            navigate("/products")
         } catch (error) {
             console.log(error);
             setUploading(false);
@@ -169,6 +198,7 @@ function UpdateProduct() {
                 </div>
                 <div style={{ marginBottom: '16px' }}>
                     <InputLabel htmlFor="photo">Photo</InputLabel>
+                    <img src={formData.photo} alt="" />
                     <input type="file" onChange={handleFileChange} />
                     {uploading && <CircularProgress size={24} />}
                 </div>

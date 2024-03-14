@@ -60,7 +60,7 @@ function UploadProducts() {
     };
 
     const handleFileChange = (e) => {
-        setUploading(true); // Set uploading state to true when file is selected
+        setUploading(true); 
         
         // Create a new FormData object
         const data = new FormData();
