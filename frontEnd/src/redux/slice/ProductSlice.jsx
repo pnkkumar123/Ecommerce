@@ -9,10 +9,16 @@ const ProductApi = createApi({
         }),
         getProductId:builder.query({
             query:(productId)=>`createProduct/products/${productId}`
+        }),
+        deleteProduct:builder.mutation({
+            query:productId=>({
+                 url:`createProduct/products/${productId}`,
+                 method:'DELETE'
+            })
         })
     })
 
 })
-export const {useGetProductQuery,useGetProductIdQuery} = ProductApi;
+export const {useGetProductQuery,useGetProductIdQuery,useDeleteProductMutation} = ProductApi;
 
 export {ProductApi};

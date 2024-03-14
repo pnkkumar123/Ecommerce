@@ -72,5 +72,14 @@ route.get("/products/:productId", async (req, res) => {
         return res.status(500).json({ error: "An error occurred while retrieving the product" });
     }
 });
-
+route.delete("/products/:productId",(req,res)=>{
+    const productId = req.params.productId;
+    Products.findByIdAndDelete(productId)
+    .then(()=>{
+        res.status(204).send();
+    })
+    .catch(error=>{
+        console.error(error);
+    })
+})
 export default route;

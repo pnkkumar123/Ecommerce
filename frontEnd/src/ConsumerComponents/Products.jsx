@@ -1,11 +1,32 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { useGetProductQuery } from '../redux/slice/ProductSlice';
+import {useNavigate} from 'react-router-dom';
+import { useGetProductQuery,useDeleteProductMutation } from '../redux/slice/ProductSlice';
 import { Grid, Card, CardMedia, CardContent, Typography, Button, Chip } from '@mui/material';
 
 function Products() {
-    const { data, isFetching, error } = useGetProductQuery();
+    const navigate = useNavigate();
+    const { data, isFetching, error,refetch } = useGetProductQuery();
+    const [deleteProduct] = useDeleteProductMutation();
+   
+   const handleDelete = (productId)=>{
+    deleteProduct(productId)
+    .unwrap()
+    .then(()=>{
+        console.log("product deleted successfully");
+        navigate("/products")
+        refetch()
 
+    })
+    .catch((error)=>{
+        console.log("error deleting product:");
+    })
+   }
+//    useEffect used for refetching data after completion of delete operation
+   useEffect(()=>{
+  refetch()
+   },[refetch])
+   
     if (isFetching) return <div>Loading...</div>;
     if (error) return <div>Error: {error.message}</div>;
     if (!data || !data.products || data.products.length === 0) {
@@ -55,7 +76,10 @@ function Products() {
                                         Size: {size}
                                     </Typography>
                                     <Button variant='contained' color='primary'>
-                                        Add To Cart
+                                        Update
+                                    </Button>
+                                    <Button onClick={()=>handleDelete(_id)} variant='contained' color='primary'>
+                                     Delete
                                     </Button>
                                 </CardContent>
                             </Card>
