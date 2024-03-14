@@ -7,10 +7,9 @@ import userReducer from '../slice/UserSlice'
 const store = configureStore({
   reducer: {
     user:userReducer,
-    // Include the generated reducer from the API
+  
     [ProductApi.reducerPath]: ProductApi.reducer,
   },
-  // Include the middleware for API requests
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(ProductApi.middleware),
 });

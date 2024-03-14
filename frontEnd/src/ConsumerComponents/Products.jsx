@@ -16,13 +16,14 @@ function Products() {
             <h3>Products</h3>
             <Grid   container spacing={2} alignItems="stretch">
                 {data.products.map((product) => {
+                    console.log(product);
                     const { productName, photo, description, price, category, brand, quantityAvailable, color, size } = product;
                     return (
                         <Grid  item xs={12} sm={6} md={3} key={product._id}>
                             <Card >
                                 <CardMedia
                                     component="img"
-                                    height="100"
+                                    height="200"
                                     image={photo ? photo : "https://img.freepik.com/free-vector/flat-design-no-data-illustration_23-2150527130.jpg?w=740&t=st=1710335455~exp=1710336055~hmac=856ef2a2e754625212837ec6499c88f1a50e2bad53016ba349817b5fa34f1af5"}
                                     alt={productName}
                                 />
