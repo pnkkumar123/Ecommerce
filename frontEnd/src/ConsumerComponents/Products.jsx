@@ -1,13 +1,14 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {useNavigate} from 'react-router-dom';
-import { useGetProductQuery,useDeleteProductMutation } from '../redux/slice/ProductSlice';
+import { useGetProductQuery,useDeleteProductMutation,useUpdateProductMutation } from '../redux/slice/ProductSlice';
 import { Grid, Card, CardMedia, CardContent, Typography, Button, Chip } from '@mui/material';
 
 function Products() {
     const navigate = useNavigate();
     const { data, isFetching, error,refetch } = useGetProductQuery();
     const [deleteProduct] = useDeleteProductMutation();
+    const [updateProduct] = useUpdateProductMutation();
    
    const handleDelete = (productId)=>{
     deleteProduct(productId)
@@ -22,9 +23,23 @@ function Products() {
         console.log("error deleting product:");
     })
    }
+   const handleUpdate = (productId)=>{
+    updateProduct(productId)
+    .unwrap()
+    .then(()=>{
+        console.log("product updated sucessfully");
+        refetch();
+        navigate("/createproduct")
+    })
+    .catch((error)=>{
+        console.log(error);
+    })
+   }
 //    useEffect used for refetching data after completion of delete operation
    useEffect(()=>{
-  refetch()
+ 
+    refetch()
+ 
    },[refetch])
    
     if (isFetching) return <div>Loading...</div>;
@@ -75,9 +90,10 @@ function Products() {
                                     <Typography variant='body2' color="text.secondary">
                                         Size: {size}
                                     </Typography>
-                                    <Button variant='contained' color='primary'>
+                                    <Link to={`/products/${product._id}/updateproduct`}>  <Button variant='contained 'onClick={()=>handleUpdate(_id)} color='primary'>
                                         Update
-                                    </Button>
+                                    </Button></Link>
+                                  
                                     <Button onClick={()=>handleDelete(_id)} variant='contained' color='primary'>
                                      Delete
                                     </Button>

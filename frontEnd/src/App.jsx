@@ -7,6 +7,7 @@ import Products from './ConsumerComponents/Products'
 import SignUp from './AdminComponents/SignUp'
 import SignIn from './AdminComponents/SignIn'
 import SingleProduct from './ConsumerComponents/SingleProduct'
+import UpdateProduct from './AdminComponents/UpdateProduct'
 
 function App() {
   
@@ -19,6 +20,7 @@ function App() {
         <Route path='/signup' element={<SignUp/>}/>
       <Route path='/dashboard' element={<DashBorad/>}/>
      <Route path='/uploadproducts' element={<UploadProducts/>}/>
+     <Route path='/products/:productId/updateproduct' element={<UpdateProduct/>}/>
      <Route path='/products' element={<Products/>}/>
      <Route path='/products/:productId' element={<SingleProduct/>}/>
     </Routes>
