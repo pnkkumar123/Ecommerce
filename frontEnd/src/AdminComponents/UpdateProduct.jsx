@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { TextField, InputLabel, Button, CircularProgress } from '@mui/material';
 import { useGetProductIdQuery, useUpdateProductMutation } from '../redux/slice/ProductSlice';
-import { Link, NavLink, useParams ,useNavigate} from 'react-router-dom';
+import {  NavLink, useParams ,useNavigate} from 'react-router-dom';
 
 function UpdateProduct() {
     const navigate = useNavigate()

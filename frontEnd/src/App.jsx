@@ -8,6 +8,7 @@ import SignUp from './AdminComponents/SignUp'
 import SignIn from './AdminComponents/SignIn'
 import SingleProduct from './ConsumerComponents/SingleProduct'
 import UpdateProduct from './AdminComponents/UpdateProduct'
+import PrivateRoute from './Components/PrivateRoute'
 
 function App() {
   
@@ -18,11 +19,13 @@ function App() {
     <Routes>
         <Route path='/signin' element={<SignIn/>}/>
         <Route path='/signup' element={<SignUp/>}/>
+      <Route element={<PrivateRoute/>}>
       <Route path='/dashboard' element={<DashBorad/>}/>
      <Route path='/uploadproducts' element={<UploadProducts/>}/>
      <Route path='/products/:productId/updateproduct' element={<UpdateProduct/>}/>
      <Route path='/products' element={<Products/>}/>
      <Route path='/products/:productId' element={<SingleProduct/>}/>
+      </Route>
     </Routes>
     </>
   )
