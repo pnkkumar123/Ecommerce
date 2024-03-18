@@ -1,36 +1,18 @@
-import React, { useEffect } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
-import { useGetProductIdQuery, useDeleteProductMutation } from '../redux/slice/ProductSlice';
+import React from 'react';
+import { useParams,useNavigate,Link } from 'react-router-dom';
+import { useGetProductIdQuery } from '../redux/slice/ProductSlice';
 
 function SingleProduct() {
-    const [deleteProduct] = useDeleteProductMutation();
     const { productId } = useParams();
-    const navigate = useNavigate();
-    const { data, error, isLoading, refetch } = useGetProductIdQuery(productId);
+    const navigate = useNavigate()
+    const { data, error, isLoading } = useGetProductIdQuery(productId);
 
     if (isLoading) return <div>Loading...</div>;
     if (error) return <div>Error: {error.message}</div>;
     if (!data) return <div>No product found</div>;
 
-    const { brand, category, color, description, photo, price, productName, quantityAvailable, size, _id } = data.product;
-
-    const handleDeleteProduct = (productId) => {
-        deleteProduct(productId)
-            .unwrap()
-            .then(() => {
-                console.log('Product deleted successfully');
-                navigate("/products");
-                refetch();
-            })
-            .catch(error => {
-                console.log(error);
-            });
-    };
-
-    useEffect(() => {
-        refetch();
-    }, [refetch]);
-
+    const { brand, category, color, description, photo, price, productName, quantityAvailable, size,_id } = data.product;
+console.log(data);
     return (
         <div>
             <h2>{productName}</h2>
@@ -42,10 +24,10 @@ function SingleProduct() {
             <p>Quantity Available: {quantityAvailable}</p>
             <p>Size: {size}</p>
             <img src={photo} alt={productName} />
-            <Link to={`/products/${_id}/updateproduct`}>
-                <button>Update</button>
-            </Link>
-            <button onClick={() => handleDeleteProduct(_id)}>Delete</button>
+            <Link to={`/products/${_id}/updateproduct`}>  <button>
+                                        Update
+                                    </button></Link>
+             {/* Assuming photo is an array */}
         </div>
     );
 }
