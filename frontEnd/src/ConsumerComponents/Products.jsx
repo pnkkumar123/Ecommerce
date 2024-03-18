@@ -1,35 +1,18 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {useNavigate} from 'react-router-dom';
-import { useGetProductQuery,useDeleteProductMutation } from '../redux/slice/ProductSlice';
-import { Grid, Card, CardMedia, CardContent, Typography, Button, Chip } from '@mui/material';
+import { useGetProductQuery } from '../redux/slice/ProductSlice';
+import { Grid, Card, CardMedia, CardContent, Typography,  Chip } from '@mui/material';
 
 function Products() {
     const navigate = useNavigate();
-    const { data, isFetching, error,refetch } = useGetProductQuery();
-    const [deleteProduct] = useDeleteProductMutation();
+    const { data, isFetching, error } = useGetProductQuery();
+   
   
    
-   const handleDelete = (productId)=>{
-    deleteProduct(productId)
-    .unwrap()
-    .then(()=>{
-        console.log("product deleted successfully");
-        navigate("/products")
-        refetch()
-
-    })
-    .catch((error)=>{
-        console.log("error deleting product:");
-    })
-   }
    
 //    useEffect used for refetching data after completion of delete operation
-   useEffect(()=>{
- 
-    refetch()
- 
-   },[refetch])
+   
    
     if (isFetching) return <div>Loading...</div>;
     if (error) return <div>Error: {error.message}</div>;
@@ -79,13 +62,9 @@ function Products() {
                                     <Typography variant='body2' color="text.secondary">
                                         Size: {size}
                                     </Typography>
-                                    <Link to={`/products/${product._id}/updateproduct`}>  <Button variant='contained' color='primary'>
-                                        Update
-                                    </Button></Link>
+                                   
                                   
-                                    <Button onClick={()=>handleDelete(_id)} variant='contained' color='primary'>
-                                     Delete
-                                    </Button>
+                                    
                                 </CardContent>
                             </Card>
                             </Link>
