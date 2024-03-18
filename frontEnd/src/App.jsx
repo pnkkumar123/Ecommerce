@@ -11,12 +11,12 @@ import UpdateProduct from './AdminComponents/UpdateProduct'
 import PrivateRoute from './Components/PrivateRoute'
 import SideBar from './AdminComponents/SideBar'
 import Profile from './AdminComponents/Profile'
-
+import {useSelector} from 'react-redux'
 import styled from 'styled-components'
 import Home from './AdminComponents/Home'
 
 function App() {
-  
+  const {currentUser} = useSelector((state)=>state.user)
 
   return (
     <Wrapper>
@@ -26,7 +26,7 @@ function App() {
   </div>
 
    <div className='routes'>
-  <SideBar/>
+  {currentUser ? <SideBar/> : ""}
    <Routes>
         <Route path='/' element={<Home/>}/>
         <Route path='/signin' element={<SignIn/>}/>
