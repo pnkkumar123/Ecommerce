@@ -1,7 +1,10 @@
 import express from 'express';
 import Products from '../models/Product.js';
 
+
 const route = express.Router();
+
+
 
 route.post("/create", (req, res) => {
     const {

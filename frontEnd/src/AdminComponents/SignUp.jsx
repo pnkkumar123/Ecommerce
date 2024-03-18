@@ -20,7 +20,7 @@ function SignUp() {
       setLoading(true);
       setError(false);
 
-      const res = await fetch("http://localhost:5000/Auth/signup", {
+      const res = await fetch("http://localhost:5000/seller/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

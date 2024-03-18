@@ -1,8 +1,10 @@
 import React from 'react'
-
+import SideBar from './SideBar'
 const DashBorad = () => {
   return (
-    <div>DashBorad</div>
+    <div>
+     <SideBar/>
+    </div>
   )
 }
 

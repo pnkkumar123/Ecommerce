@@ -25,6 +25,9 @@ const Navbar = () => {
           <NavLink to="/products" className="text-white">
             <Button color="inherit">Products</Button>
           </NavLink>
+          <NavLink to="/signin" className="text-white">
+            <Button color="inherit">Sign-IN</Button>
+          </NavLink>
         </div>
       </Toolbar>
     </AppBar>

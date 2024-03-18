@@ -14,7 +14,8 @@ const ProductSchema = new mongoose.Schema({
     }],
    
     color: { type: String },
-    size: { type: String }
+    size: { type: String },
+    seller:{type:mongoose.Schema.Types.ObjectId,ref:'Seller'}
     
 }, { timestamps: true });
 

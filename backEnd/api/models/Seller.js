@@ -20,7 +20,8 @@ const SellerSchema = new mongoose.Schema({
         type:String,
         require:true,
         unique:true
-    }
+    },
+    products:[{type:mongoose.Schema.Types.ObjectId,ref:'Product'}]
 })
 const Seller =  mongoose.model("SellerSchema",SellerSchema)
 

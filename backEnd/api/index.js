@@ -4,6 +4,7 @@ import dotenv from 'dotenv'
 import createProduct from './routes/createProduct.js'
 import route from './routes/Auth.js'
 import cors from 'cors';
+import consumerroute from './routes/Consumer.js'
 
 
 dotenv.config()
@@ -22,4 +23,5 @@ app.listen("5000",()=>{
     console.log("port listed");
 })
 app.use("/createProduct",createProduct)
-app.use("/Auth",route)
+app.use("/seller",route)
+app.use("/consumer",consumerroute)
