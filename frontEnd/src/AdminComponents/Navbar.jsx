@@ -1,11 +1,30 @@
 import React from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import styled from 'styled-components'
-import {useSelector} from 'react-redux'
+import {useSelector,useDispatch} from 'react-redux'
+import { signInFailure, signOutFailure,signOutStart,signOutSuccess } from '../redux/slice/UserSlice' 
 
 
 function Navbar() {
-  const {currentUser} = useSelector((state)=>state.user)
+  const {currentUser,loading,error} = useSelector((state)=>state.user)
+  const dispatch = useDispatch(); 
+  const handleSignOut = async()=>{
+    try{
+      dispatch(signOutStart())
+      const res = await fetch('http://localhost:5000/seller/signout',{
+        method:'POST'
+      });
+      const data = await res.json();
+      if(data.success === false){
+        dispatch(signOutFailure(data.message))
+        return;
+      }
+      dispatch(signOutSuccess(data))
+    }catch(error){
+      dispatch(signInFailure(error.message))
+    }
+   }
+ 
   return (
     <>
     <Wrapper>
@@ -17,7 +36,7 @@ function Navbar() {
 
          </div>
          <div className='user'>
-          {currentUser ? <span>
+          {currentUser ? <span onClick={(e)=>handleSignOut(e.target.value)}>
               signout
             </span> :  <NavLink to='/signin'>
                 Log in
