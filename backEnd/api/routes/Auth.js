@@ -53,5 +53,14 @@ route.post("/signin",async(req,res,next)=>{
   }
 
 
+});
+route.post("/signout",(req,res,next)=>{
+  try{
+    res.clearCookie('access_token');
+    res.status(201).json('User has been logged out')
+  }catch(e){
+    console.log(e);
+  }
 })
+
 export default route

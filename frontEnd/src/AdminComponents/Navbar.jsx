@@ -1,37 +1,54 @@
-import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import { NavLink } from 'react-router-dom';
+import React from 'react'
+import { Link, NavLink } from 'react-router-dom'
+import styled from 'styled-components'
+import {useSelector} from 'react-redux'
 
-const Navbar = () => {
+
+function Navbar() {
+  const {currentUser} = useSelector((state)=>state.user)
   return (
-    <AppBar position="static" sx={{color: "rgb(255 255 255)"}}>
-      <Toolbar className="flex justify-between">
-        <div>
-          {/* Logo */}
-          <NavLink to="/dashboard" className="text-white">
-            <Typography variant="h6" component="div">
-              Ecommerce Dashboard
-            </Typography>
-          </NavLink>
-        </div>
-        <div className="navlinks">
-          {/* Navigation Links */}
-          <NavLink to="/uploadproducts" className="text-white">
-            <Button color="inherit">Upload Products</Button>
-          </NavLink>
-          <NavLink to="/products" className="text-white">
-            <Button color="inherit">Products</Button>
-          </NavLink>
-          <NavLink to="/signin" className="text-white">
-            <Button color="inherit">Sign-IN</Button>
-          </NavLink>
-        </div>
-      </Toolbar>
-    </AppBar>
-  );
-};
+    <>
+    <Wrapper>
+    <nav className='navbar'>
+         <div>
+         <Link to='/' className='navbar-logo'>
+            Ecommerce
+         </Link>
 
-export default Navbar;
+         </div>
+         <div className='user'>
+          {currentUser ? <span>
+              signout
+            </span> :  <NavLink to='/signin'>
+                Log in
+            </NavLink>}    
+           
+           
+         </div>
+    </nav>
+    
+        
+    </Wrapper>
+   
+    </>
+  )
+}
+const Wrapper = styled.section `
+.navbar {
+  height: 10vh;
+  background: black;
+  display: flex;
+}
+
+.navbar-logo {
+  color: white;
+  text-decoration: none;
+  font-size: 2rem;
+  width: 10rem;
+}
+
+.user span {
+  color: white;
+}
+`
+export default Navbar

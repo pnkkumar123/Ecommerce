@@ -1,54 +1,45 @@
-import React from 'react'
-import { styled } from '@mui/system';
-
-import Drawer from '@mui/material/Drawer';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
-import {Link} from 'react-router-dom';
-
-const drawerWidth = 240;
-
-const useStyles = styled((theme)=>({
-    root:{
-        display:'flex',
-        marginBottom:'20px',
-
-    },
-    drawer:{
-        width:drawerWidth,
-        flexShrink:0,
-    },
-    drawerPaper:{
-        width:drawerWidth,
-    },
-}));
-
+import React from 'react';
+import styled from 'styled-components'
+import { Link, NavLink } from 'react-router-dom';
+import { CiHome } from "react-icons/ci";
+import { RiUploadCloudLine } from "react-icons/ri";
+import { CgProfile } from "react-icons/cg";
+import { FaStore } from "react-icons/fa";
 
 
 function SideBar() {
-    const classes = useStyles();
-  return (
-    <div className={classes.root}>
-        <Drawer
-        className={classes.drawer}
-        variant='permanent'
-        classes={{paper:classes.drawerPaper,}}
-          >
-            <List>
-                <ListItem button  component={Link} to="/dashboard">
-                    <ListItemText primary="Dashboard"/>
-                </ListItem>
-                <ListItem button component={Link} to="/products">
-                    <ListItemText primary="Products"/>
-                </ListItem>
-                <ListItem button component={Link} to="/uploadproducts">
-                    <ListItemText primary="Upload Products"/>
-                </ListItem>
-            </List>
-          </Drawer>
-    </div>
-  )
-}
+  
 
-export default SideBar
+  return (
+    <Wrapper>
+      <div className="main">
+          <div className="links">
+            <NavLink to='/dashboard'>Dashboard <CiHome /></NavLink>
+            <NavLink to='/uploadproducts'>Upload-Product <RiUploadCloudLine /> </NavLink>
+            <NavLink to='/profile'>Profile <CgProfile /></NavLink>
+            <NavLink to='/products'>Products <FaStore /></NavLink>
+          </div>
+      </div>
+    </Wrapper>
+  );
+}
+const Wrapper = styled.section`
+width:400px
+.main{
+  top:10vh;
+  width:400pxpx;
+  border-right:1px black solid
+}
+.links{
+  display:flex;
+  flex-direction:column;
+  margin:20px;
+  gap:30px;
+  padding:0 10px 10px 18px;
+}
+.links:hover{
+  cursor:pointer;
+  transform:transition (105%)
+}
+`
+export default SideBar;
