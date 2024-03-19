@@ -17,11 +17,13 @@ import Home from './AdminComponents/Home'
 import ConsumerProducts from './ConsumerComponents/ConsumerProducts'
 import ConsumerSignIn from './ConsumerComponents/ConsumerSignIn'
 import PrivateConsumerRoute from './Components/PrivateConsumerRoute'
+import ConsumerSignUp from './ConsumerComponents/ConsumerSignUp'
+import { useState } from 'react'
 
 
 function App() {
   const {currentUser} = useSelector((state)=>state.user)
-  
+  const isSeller = useSelector((state)=>state.user.isSeller)
 
   return (
     <Wrapper>
@@ -31,13 +33,18 @@ function App() {
   </div>
 
    <div className='routes'>
-  {currentUser  ? <SideBar/> : ""}
+  {currentUser && isSeller  ? <SideBar/> : ""}
 
    <Routes>
         <Route path='/' element={<Home/>}/>
         <Route path='/signin' element={<SignIn/>}/>
+        <Route path='/consumersignup' element={<ConsumerSignUp/>}/>
         <Route path='/consumersignin' element={<ConsumerSignIn/>}/>
         <Route path='/signup' element={<SignUp/>}/>
+        <Route element={<PrivateConsumerRoute/>}>
+
+      <Route path='/consumerproducts' element={<ConsumerProducts/>}/>
+        </Route>
       <Route element={<PrivateSellerRoute/>}>
   
       <Route path='/dashboard' element={<DashBorad/>}/>
@@ -46,7 +53,6 @@ function App() {
      <Route path='/products/:productId/updateproduct' element={<UpdateProduct/>}/>
      <Route path='/products/:productId' element={<SingleProduct/>}/>
      <Route path='/products' element={<Products/>}/>
-      <Route path='/consumerproducts' element={<ConsumerProducts/>}/>
       </Route>
     </Routes>
    </div>

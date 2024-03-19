@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import {
-  signInFailure,
-  signInStart,
-  signInSuccess, // Corrected import statement
+  SellerSignInFailure,
+  SellerSignInSuccess,
+ SellerSignInStart // Corrected import statement
 } from "../redux/slice/UserSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -23,7 +23,7 @@ function SignIn() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      dispatch(signInStart());
+      dispatch(SellerSignInStart());
       const res = await fetch("http://localhost:5000/seller/signin", {
         method: "POST",
         headers: {
@@ -32,15 +32,16 @@ function SignIn() {
         body: JSON.stringify(formData),
       });
       const data = await res.json();
-      dispatch(signInSuccess(data));
+      dispatch(SellerSignInSuccess(data));
       if(data.sucess === false){
-       dispatch(signInFailure());
+       dispatch(SellerSignInFailure());
         return;
       }
 
       navigate('/dashboard')
     } catch (error) {
-      dispatch(signInFailure(error.message));
+      dispatch(SellerSignInFailure(error));
+      console.log(error);
     }
   };
 

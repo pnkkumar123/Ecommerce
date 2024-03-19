@@ -2,7 +2,7 @@ import React from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import styled from 'styled-components'
 import {useSelector,useDispatch} from 'react-redux'
-import { signInFailure, signOutFailure,signOutStart,signOutSuccess } from '../redux/slice/UserSlice' 
+import {  signOutFailure,signOutStart,signOutSuccess } from '../redux/slice/UserSlice' 
 import { FaStore } from "react-icons/fa";
 
 function Navbar() {
@@ -21,7 +21,7 @@ function Navbar() {
       }
       dispatch(signOutSuccess(data))
     }catch(error){
-      dispatch(signInFailure(error.message))
+      dispatch(signOutFailure(error.message))
     }
    }
  
