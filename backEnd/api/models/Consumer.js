@@ -5,6 +5,10 @@ const Consumer = new mongoose.Schema({
     email:{type:String,required:true},
     password:{type:String,required:true},
     userName:{type:String,required:true},
+    isSeller:{
+        type:Boolean,
+        default:false
+       },
     cart:[{type:Schema.Types.ObjectId,ref:'Product'}],
     orders:[{type:Schema.Types.ObjectId,ref:'Order'}]
 })

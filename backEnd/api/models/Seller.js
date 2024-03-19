@@ -16,6 +16,10 @@ const SellerSchema = new mongoose.Schema({
           require:true,
           unique:true
     },
+    isSeller:{
+     type:Boolean,
+     default:true
+    },
     userName:{
         type:String,
         require:true,

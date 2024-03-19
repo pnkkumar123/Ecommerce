@@ -3,7 +3,7 @@ import { Link, NavLink } from 'react-router-dom'
 import styled from 'styled-components'
 import {useSelector,useDispatch} from 'react-redux'
 import { signInFailure, signOutFailure,signOutStart,signOutSuccess } from '../redux/slice/UserSlice' 
-
+import { FaStore } from "react-icons/fa";
 
 function Navbar() {
   const {currentUser,loading,error} = useSelector((state)=>state.user)
@@ -44,6 +44,7 @@ function Navbar() {
            
            
          </div>
+         <div className='seller'>{currentUser ? <span>{currentUser.name}</span> :<NavLink to="/signin">Seller<FaStore /></NavLink> }</div>
     </nav>
     
         
@@ -58,7 +59,9 @@ const Wrapper = styled.section `
   background: black;
   display: flex;
 }
-
+.seller{
+  color:white;
+}
 .navbar-logo {
   color: white;
   text-decoration: none;

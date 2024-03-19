@@ -8,15 +8,20 @@ import SignUp from './AdminComponents/SignUp'
 import SignIn from './AdminComponents/SignIn'
 import SingleProduct from './ConsumerComponents/SingleProduct'
 import UpdateProduct from './AdminComponents/UpdateProduct'
-import PrivateRoute from './Components/PrivateRoute'
+import PrivateSellerRoute from './Components/PrivateSellerRoute'
 import SideBar from './AdminComponents/SideBar'
 import Profile from './AdminComponents/Profile'
 import {useSelector} from 'react-redux'
 import styled from 'styled-components'
 import Home from './AdminComponents/Home'
+import ConsumerProducts from './ConsumerComponents/ConsumerProducts'
+import ConsumerSignIn from './ConsumerComponents/ConsumerSignIn'
+import PrivateConsumerRoute from './Components/PrivateConsumerRoute'
+
 
 function App() {
   const {currentUser} = useSelector((state)=>state.user)
+  
 
   return (
     <Wrapper>
@@ -26,19 +31,22 @@ function App() {
   </div>
 
    <div className='routes'>
-  {currentUser ? <SideBar/> : ""}
+  {currentUser  ? <SideBar/> : ""}
+
    <Routes>
         <Route path='/' element={<Home/>}/>
         <Route path='/signin' element={<SignIn/>}/>
+        <Route path='/consumersignin' element={<ConsumerSignIn/>}/>
         <Route path='/signup' element={<SignUp/>}/>
-      <Route element={<PrivateRoute/>}>
+      <Route element={<PrivateSellerRoute/>}>
   
       <Route path='/dashboard' element={<DashBorad/>}/>
       <Route path='/profile' element={<Profile/>}/>
      <Route path='/uploadproducts' element={<UploadProducts/>}/>
      <Route path='/products/:productId/updateproduct' element={<UpdateProduct/>}/>
-     <Route path='/products' element={<Products/>}/>
      <Route path='/products/:productId' element={<SingleProduct/>}/>
+     <Route path='/products' element={<Products/>}/>
+      <Route path='/consumerproducts' element={<ConsumerProducts/>}/>
       </Route>
     </Routes>
    </div>
