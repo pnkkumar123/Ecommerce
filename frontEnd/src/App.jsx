@@ -19,6 +19,9 @@ import ConsumerSignIn from './ConsumerComponents/ConsumerSignIn'
 import PrivateConsumerRoute from './Components/PrivateConsumerRoute'
 import ConsumerSignUp from './ConsumerComponents/ConsumerSignUp'
 import { useState } from 'react'
+import Cart from './ConsumerComponents/Cart'
+import Orders from './ConsumerComponents/Orders'
+import ConsumerProfile from './ConsumerComponents/ConsumerProfile'
 
 
 function App() {
@@ -41,9 +44,11 @@ function App() {
         <Route path='/consumersignup' element={<ConsumerSignUp/>}/>
         <Route path='/consumersignin' element={<ConsumerSignIn/>}/>
         <Route path='/signup' element={<SignUp/>}/>
-        <Route element={<PrivateConsumerRoute/>}>
-
       <Route path='/consumerproducts' element={<ConsumerProducts/>}/>
+        <Route element={<PrivateConsumerRoute/>}>
+          <Route path='/cart' element={<Cart/>}/>
+          <Route path='/consumerprofile' element={<ConsumerProfile/>}/>
+          <Route path='/order' element={<Orders/>}/>
         </Route>
       <Route element={<PrivateSellerRoute/>}>
   
