@@ -2,6 +2,7 @@ import React from 'react'
 import { useGetProductQuery } from '../redux/slice/ProductSlice'
 import {Grid,Card,CardMedia,CardContent,Typography,Button,Chip} from '@mui/material'
 import { Link } from 'react-router-dom';
+import Filters from './Filters';
 
 function ConsumerProducts() {
   const {data,isFetching,error} = useGetProductQuery();
@@ -10,10 +11,11 @@ function ConsumerProducts() {
   if(error) return <p>error..</p>
   if(!data || !data.products || data.products.length === 0  )return <p>""</p>
   return (
-    <div>
-      <div>
-        
+    <div className='products'>
+      <div className='filters'>
+        <Filters/>
       </div>
+    <div className='products'>
     <h1>Products</h1>
     <Grid container spacing={2} alignItems="stretch">
       {data.products && data.products.map((product) => {
@@ -61,6 +63,7 @@ function ConsumerProducts() {
         );
       })}
     </Grid>
+    </div>
   </div>
   
   )
