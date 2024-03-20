@@ -25,6 +25,7 @@ function SideBar() {
 }
 const Wrapper = styled.section`
 width:400px
+
 .main{
   top:10vh;
   width:400pxpx;
