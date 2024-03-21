@@ -3,22 +3,36 @@ import { useGetProductQuery } from '../redux/slice/ProductSlice'
 import {Grid,Card,CardMedia,CardContent,Typography,Button,Chip} from '@mui/material'
 import { Link } from 'react-router-dom';
 import Filters from './Filters';
+import { selectedCategoryFilter, setCategoryFilter } from '../redux/slice/FilterSlice';
+import {useSelector,useDispatch} from 'react-redux'
 
 function ConsumerProducts() {
+  const selectedCategory = useSelector(selectedCategoryFilter);
+  const dispatch = useDispatch()
   const {data,isFetching,error} = useGetProductQuery();
   
   if(isFetching)return <p>Loading...</p>;
   if(error) return <p>error..</p>
   if(!data || !data.products || data.products.length === 0  )return <p>""</p>
+  // extract unique categories from products
+  const categories = Array.from(new Set(data.products.map(product=>product.category)));
+  // filter products based on selected category
+  const filteredProducts = selectedCategory ? data.products.filter(product=>product.category === selectedCategory) : data.products;
+ const handleClearFilter = ()=>{
+  dispatch(setCategoryFilter(null))
+ }
   return (
     <div className='products'>
       <div className='filters'>
-        <Filters/>
+        <Filters categories={categories}/>
+        {selectedCategory &&
+        <button onClick={handleClearFilter}>Clear filters</button>
+        }
       </div>
     <div className='products'>
     <h1>Products</h1>
     <Grid container spacing={2} alignItems="stretch">
-      {data.products && data.products.map((product) => {
+      {filteredProducts.map((product) => {
         const {_id, photo, description, productName, price, category, brand, quantityAvailable, color, size} = product;
         return (
           <Grid item xs={12} sm={6} md={3} key={_id}>

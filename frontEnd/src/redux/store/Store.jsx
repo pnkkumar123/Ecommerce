@@ -1,33 +1,36 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { persistStore, persistReducer } from 'redux-persist'; // Import persistStore and persistReducer
+import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import { ProductApi } from '../slice/ProductSlice';
 import userReducer from '../slice/UserSlice';
+import filterReducer from '../slice/FilterSlice'; // Import the FilterSlice
 
-// defining persistence configuration
+// Define persistence configuration
 const persistConfig = {
   key: 'root',
   storage,
 };
 
-// creating persist reducer
-const persistedReducer = persistReducer(persistConfig, userReducer); // Use a different name for the persisted reducer
+// Create persisted reducers
+const persistedUserReducer = persistReducer(persistConfig, userReducer);
+const persistedFilterReducer = persistReducer(persistConfig, filterReducer); // Persist the FilterSlice
 
 const store = configureStore({
   reducer: {
-    user: persistedReducer, // Use the persisted reducer
+    user: persistedUserReducer,
+    filter: persistedFilterReducer, // Add the persisted FilterSlice reducer to the store
     [ProductApi.reducerPath]: ProductApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
-  
     getDefaultMiddleware({
-      serializableCheck:import.meta.env.NODE_ENV !== 'production',
+      serializableCheck: import.meta.env.NODE_ENV !== 'production',
     }).concat(ProductApi.middleware),
 });
 
-// creating persistor
+// Create persistor
 export const persistor = persistStore(store);
 
-// Exporting product query
+// Export product query
 export const { useGetProductQuery } = ProductApi;
-export default store
+
+export default store;
