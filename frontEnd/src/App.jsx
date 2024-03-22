@@ -22,6 +22,7 @@ import { useState } from 'react'
 import Cart from './ConsumerComponents/Cart'
 import Orders from './ConsumerComponents/Orders'
 import ConsumerProfile from './ConsumerComponents/ConsumerProfile'
+import ConsumerSingleProduct from './ConsumerComponents/ConsumerSingleProduct'
 
 
 function App() {
@@ -45,18 +46,19 @@ function App() {
         <Route path='/consumersignin' element={<ConsumerSignIn/>}/>
         <Route path='/signup' element={<SignUp/>}/>
       <Route path='/consumerproducts' element={<ConsumerProducts/>}/>
+      <Route path='/consumerproducts/:productId' element={<ConsumerSingleProduct/>}/>
         <Route element={<PrivateConsumerRoute/>}>
-          <Route path='/cart' element={<Cart/>}/>
+          <Route path='/add-to-cart' element={<Cart/>}/>
           <Route path='/consumerprofile' element={<ConsumerProfile/>}/>
           <Route path='/order' element={<Orders/>}/>
         </Route>
+     <Route path='/products/:productId' element={<SingleProduct/>}/>
       <Route element={<PrivateSellerRoute/>}>
   
       <Route path='/dashboard' element={<DashBorad/>}/>
       <Route path='/profile' element={<Profile/>}/>
      <Route path='/uploadproducts' element={<UploadProducts/>}/>
      <Route path='/products/:productId/updateproduct' element={<UpdateProduct/>}/>
-     <Route path='/products/:productId' element={<SingleProduct/>}/>
      <Route path='/products' element={<Products/>}/>
       </Route>
     </Routes>

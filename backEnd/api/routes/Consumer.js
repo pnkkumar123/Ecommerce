@@ -1,7 +1,7 @@
 import express from 'express'
 import ConsumerSchema from '../models/Consumer.js'
 import bcryptjs from 'bcryptjs'
-
+// import Product from '../models/Product.js'
 import jwt from 'jsonwebtoken'
 
 const consumerroute = express.Router()
@@ -53,6 +53,75 @@ consumerroute.post("/signin",async (req,res,next)=>{
 
     }catch(e){
         next(e);
+    }
+})
+consumerroute.post("/add-to-cart",async(req,res,next)=>{
+    const {userId,productId} = req.body;
+    try{
+        const consumer = await ConsumerSchema.findById(userId);
+        if(!consumer){
+            return res.status(404).json({error:"User not found"});
+        }
+        // add productId to user's cart
+        consumer.cart.push(productId);
+        await consumer.save();
+        res.json({message:"Product added to cart successfully"})
+    }catch(error){
+        next(error)
+        res.status(500).json({error:"Server error"})
+    }
+})
+consumerroute.get("/get-cart/:userId", async (req, res) => {
+    const userId = req.params.userId;
+    try {
+        const consumer = await ConsumerSchema.findById(userId).populate('cart');
+        if (!consumer) {
+            return res.status(404).json({ error: "User not found" });
+        }
+        // Extract cart items with additional product details
+        const cartItems = consumer.cart.map(product => ({
+            _id: product._id,
+            name: product.productName,
+            quantity:product. quantityAvailable,
+            price: product.price,
+            // Add more fields as needed
+        }));
+        res.json({ cartItems });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Server error" });
+    }
+});
+
+consumerroute.post("/remove-from-cart",async (req,res)=>{
+    const {userId,productId} = req.body;
+    try{
+        const consumer = await ConsumerSchema.findById(userId);
+        if(!consumer){
+            return res.status(404).json({error:"User not found"});
+        }
+        // remove the productId from the user's cart
+        consumer.cart = consumer.cart.filter(item=>item.toString() !== productId);
+        await consumer.save();
+        res.json({message:'Product removed from cart successfully'})
+    }catch(error){
+        console.error(error);
+        res.status(500).json({error:"Server error"})
+    }
+})
+consumerroute.post("/clear-cart",async (req,res)=>{
+    const {userId} = req.body;
+    try{
+        const consumer = await ConsumerSchema.findById(userId);
+        if(!consumer){
+            res.status(404).json({error:'User not found'});
+        }
+        consumer.cart = [];
+        await consumer.save();
+        res.json({message:'Cart cleared successfully'});
+    }catch(error){
+        console.error(error);
+        res.status(500).json({eror:'Server error'})
     }
 })
 export default consumerroute

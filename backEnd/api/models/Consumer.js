@@ -9,7 +9,7 @@ const Consumer = new mongoose.Schema({
         type:Boolean,
         default:false
        },
-    cart:[{type:Schema.Types.ObjectId,ref:'Product'}],
+    cart:[{type:Schema.Types.ObjectId,ref:'Products'}],
     orders:[{type:Schema.Types.ObjectId,ref:'Order'}]
 })
 

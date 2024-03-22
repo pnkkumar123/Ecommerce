@@ -50,7 +50,7 @@ function Navbar() {
                 </NavLink>
               </li>
                   <li>
-                    <NavLink to='/cart'>Cart</NavLink>
+                    <NavLink to='/add-to-cart'>Cart</NavLink>
                   </li>
                 </>
               )}

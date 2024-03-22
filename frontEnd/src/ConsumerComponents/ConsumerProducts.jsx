@@ -5,12 +5,37 @@ import { Link } from 'react-router-dom';
 import Filters from './Filters';
 import { selectedCategoryFilter, setCategoryFilter } from '../redux/slice/FilterSlice';
 import {useSelector,useDispatch} from 'react-redux'
+import { addToCart } from '../redux/slice/CartSlice';
 
 function ConsumerProducts() {
+  const currentUser = useSelector((state)=>state.user);
   const selectedCategory = useSelector(selectedCategoryFilter);
   const dispatch = useDispatch()
   const {data,isFetching,error} = useGetProductQuery();
   
+const handleAddToCart = async(productId)=>{
+  try{
+    dispatch(addToCart(productId));
+    const response = await fetch("http://localhost:5000/consumer/add-to-cart",{
+      method:"POST",
+      headers:{
+        "Content-Type" : 'application/json',
+      },
+      body:JSON.stringify({userId:currentUser.id,productId}),
+    });
+    if(response.ok){
+      console.log("product added to cart");
+    }else{
+      console.log('failed to add products to cart');
+    }
+
+  }catch(e){
+    console.log(e);
+  }
+  
+};
+
+
   if(isFetching)return <p>Loading...</p>;
   if(error) return <p>error..</p>
   if(!data || !data.products || data.products.length === 0  )return <p>""</p>
@@ -34,9 +59,10 @@ function ConsumerProducts() {
     <Grid container spacing={2} alignItems="stretch">
       {filteredProducts.map((product) => {
         const {_id, photo, description, productName, price, category, brand, quantityAvailable, color, size} = product;
+      console.log(_id);
         return (
           <Grid item xs={12} sm={6} md={3} key={_id}>
-            <Link to={`/consumerproducts/${_id}`} style={{textDecoration:'none'}}>
+            <Link to={`/add-to-cart`} style={{textDecoration:'none'}}>
               <Card>
               <CardMedia
               component="img"
@@ -65,7 +91,7 @@ function ConsumerProducts() {
                   </Typography>
                    
 
-                   <Button variant='contained' color='primary'>Add to Cart</Button>
+                   <Button variant='contained' color='primary' onClick={()=>handleAddToCart(_id)}>Add to Cart</Button>
 
 
                 </CardContent>
