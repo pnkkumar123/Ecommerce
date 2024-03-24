@@ -1,17 +1,23 @@
 import React from 'react';
 import { useGetProductQuery } from '../redux/slice/ProductSlice';
 import { Grid, Card, CardMedia, CardContent, Typography, Button } from '@mui/material';
-import { Link } from 'react-router-dom';
+import {useNavigate } from 'react-router-dom';
+
+
 import { useSelector, useDispatch } from 'react-redux';
 import { addToCart } from '../redux/slice/CartSlice';
 
 function ConsumerProducts() {
-  const currentUser = useSelector((state) => state.user.currentUser.user._id);
+  const navigate = useNavigate()
+  const currentUser = useSelector((state) => state.user.currentUser?.user?._id);
   const dispatch = useDispatch();
   const { data, isFetching, error } = useGetProductQuery();
 
   const handleAddToCart = async (productId, productName, price, photo) => {
     try {
+      if(!currentUser){
+       navigate('/consumersignin')
+      }
       const userId = currentUser;
       dispatch(addToCart(productId));
       const response = await fetch("http://localhost:5000/consumer/add-to-cart", {
@@ -69,7 +75,7 @@ function ConsumerProducts() {
                   <Typography variant='body2' color="text.secondary">
                     Quantity Available: {quantityAvailable}
                   </Typography>
-                  <Button variant='contained' color='primary' onClick={() => handleAddToCart(_id, productName, price, photo)}>Add to Cart</Button>
+                  {!currentUser && <Button variant='contained' color='primary' onClick={() => handleAddToCart(_id, productName, price, photo)}>Add to Cart</Button>}
                 </CardContent>
               </Card>
             </Grid>
@@ -81,4 +87,5 @@ function ConsumerProducts() {
 }
 
 export default ConsumerProducts;
+
 
