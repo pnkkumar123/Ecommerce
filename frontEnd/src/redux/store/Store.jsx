@@ -3,29 +3,31 @@ import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import { ProductApi } from '../slice/ProductSlice';
 import userReducer from '../slice/UserSlice';
-import filterReducer from '../slice/FilterSlice'; // Import the FilterSlice
-import cartReducer from '../slice/CartSlice'
+import filterReducer from '../slice/FilterSlice';
+import cartReducer from '../slice/CartSlice';
+
 // Define persistence configuration
 const persistConfig = {
-  key: 'root',
-  storage,
+  key: 'root', // Unique key for the persisted state
+  storage, // Storage engine (localStorage, AsyncStorage, etc.)
 };
 
 // Create persisted reducers
 const persistedUserReducer = persistReducer(persistConfig, userReducer);
-const persistedFilterReducer = persistReducer(persistConfig, filterReducer); // Persist the FilterSlice
-const persistedCartReducer = persistReducer(persistConfig,cartReducer)
+const persistedFilterReducer = persistReducer(persistConfig, filterReducer);
+const persistedCartReducer = persistReducer(persistConfig, cartReducer);
 
+// Configure Redux store
 const store = configureStore({
   reducer: {
     user: persistedUserReducer,
     filter: persistedFilterReducer,
-    cart:persistedCartReducer, // Add the persisted FilterSlice reducer to the store
+    cart: persistedCartReducer,
     [ProductApi.reducerPath]: ProductApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
-      serializableCheck: import.meta.env.NODE_ENV !== 'production',
+      serializableCheck: false, // Disable serialization checks for Redux-persist
     }).concat(ProductApi.middleware),
 });
 

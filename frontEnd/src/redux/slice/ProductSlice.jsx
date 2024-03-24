@@ -7,9 +7,13 @@ const ProductApi = createApi({
         getProduct:builder.query({
             query: ()=> 'createProduct/products'
         }),
+        getCart:builder.query({
+            query:()=>'consumer/cart'
+        }),
         getProductId:builder.query({
             query:(productId)=>`createProduct/products/${productId}`
         }),
+       
         deleteProduct:builder.mutation({
             query:productId=>({
                  url:`createProduct/products/${productId}`,
@@ -26,6 +30,6 @@ const ProductApi = createApi({
     })
 
 })
-export const {useGetProductQuery,useGetProductIdQuery,useDeleteProductMutation,useUpdateProductMutation} = ProductApi;
+export const {useGetProductQuery,useGetCartQuery,useGetProductIdQuery,useDeleteProductMutation,useUpdateProductMutation} = ProductApi;
 
 export {ProductApi};

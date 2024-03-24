@@ -96,7 +96,7 @@ function UploadProducts() {
             }
             setLoading(true);
             setError(false);
-            navigate('/dashboard')
+            navigate('/products')
 
             console.log(formData);
 
