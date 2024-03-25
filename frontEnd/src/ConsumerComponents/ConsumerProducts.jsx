@@ -1,7 +1,7 @@
 import React from 'react';
 import { useGetProductQuery } from '../redux/slice/ProductSlice';
 import { Grid, Card, CardMedia, CardContent, Typography, Button } from '@mui/material';
-import {useNavigate } from 'react-router-dom';
+import {NavLink, useNavigate } from 'react-router-dom';
 
 
 import { useSelector, useDispatch } from 'react-redux';
@@ -75,7 +75,7 @@ function ConsumerProducts() {
                   <Typography variant='body2' color="text.secondary">
                     Quantity Available: {quantityAvailable}
                   </Typography>
-                  {!currentUser && <Button variant='contained' color='primary' onClick={() => handleAddToCart(_id, productName, price, photo)}>Add to Cart</Button>}
+                  {currentUser ? (<Button variant='contained' color='primary' onClick={() => handleAddToCart(_id, productName, price, photo)} >Add to Cart</Button> ): (<Button variant='contained' color='primary' ><NavLink to='/consumersignin'>Add to Cart</NavLink> </Button>)}
                 </CardContent>
               </Card>
             </Grid>

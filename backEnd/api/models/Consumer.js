@@ -13,5 +13,5 @@ const Consumer = new mongoose.Schema({
     orders:[{type:Schema.Types.ObjectId,ref:'Order'}]
 })
 
-const ConsumerSchema = mongoose.model("Consumer",Consumer);
-export default ConsumerSchema
+const User = mongoose.model("Consumer",Consumer);
+export default User

@@ -1,5 +1,5 @@
 import express from 'express'
-import ConsumerSchema from '../models/Consumer.js'
+import User from '../models/Consumer.js'
 import bcryptjs from 'bcryptjs'
 import Products from '../models/Product.js'
 import jwt from 'jsonwebtoken'
@@ -12,13 +12,13 @@ const consumerroute = express.Router()
 consumerroute.post("/signup",async(req,res)=>{
     const {name,userName,password,email} = req.body;
     try{
-         const existingUser = await ConsumerSchema.findOne({$or:[{email},{userName}]})
+         const existingUser = await User.findOne({$or:[{email},{userName}]})
          if(existingUser){
             return res.status(401).json({error:"user already exists"})
          }
          const hashedPassword = bcryptjs.hashSync(password,10)
     
-    const consumer = new ConsumerSchema({
+    const consumer = new User({
         name,
         email,
         password:hashedPassword,
@@ -40,7 +40,7 @@ consumerroute.post("/signup",async(req,res)=>{
 consumerroute.post("/signin", async (req, res, next) => {
     const { email, password } = req.body;
     try {
-        const validUser = await ConsumerSchema.findOne({ email });
+        const validUser = await User.findOne({ email });
         if (!validUser) {
             return res.status(401).json({ error: "User not found" });
         }
@@ -67,6 +67,12 @@ consumerroute.post('/add-to-cart', async (req, res) => {
       return res.status(400).json({ message: 'userId is required' });
     }
 
+    // Find the user by ID
+    const user = await User.findOne({ _id: userId }).select("-password");
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
     let cart = await Cart.findOne({ userId });
 
     if (!cart) {
@@ -86,34 +92,56 @@ consumerroute.post('/add-to-cart', async (req, res) => {
 
     // Save the cart
     await cart.save();
-    res.json(cart);
+    res.json({ user, cart });
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
   }
 });
 
-
 // products route
 
-consumerroute.get('/cart', async (req, res) => {
-    try {
-      Cart.find()
-      .then(products=>{
-        return res.status(200).json({products})
+
+
+consumerroute.get("/cart/:id", (req, res) => {
+  // Find the user by ID
+ User.findOne({ _id: req.params.id }) // Changed from User to User
+      .select("-password")
+      .then(user => {
+          if (!user) {
+              return res.status(404).json({ error: "User not found" });
+          }
+          // Find the cart items for the user
+          Cart.findOne({ userId: req.params.id })
+              .populate({
+                  path: 'items.productId',
+                  model: 'Products', // Assuming 'Product' is the name of your product model
+                  select: 'productName price photo' // Select the fields you want to populate
+              })
+              .exec()
+              .then(cart => {
+                  if (!cart) {
+                      return res.status(404).json({ error: "Cart not found for this user" });
+                  }
+                  res.json({ user, cart });
+              })
+              .catch(err => {
+                  return res.status(500).json({ error: "Internal Server Error" });
+              });
       })
-    } catch (err) {
-      console.error(err.message);
-      res.status(500).send('Server Error');
-    }
+      .catch(err => {
+          return res.status(500).json({ error: "Internal Server Error" });
+      });
 });
+
+
        
 
 
 consumerroute.post("/remove-from-cart",async (req,res)=>{
     const {userId,productId} = req.body;
     try{
-        const consumer = await ConsumerSchema.findById(userId);
+        const consumer = await User.findById(userId);
         if(!consumer){
             return res.status(404).json({error:"User not found"});
         }
@@ -129,7 +157,7 @@ consumerroute.post("/remove-from-cart",async (req,res)=>{
 consumerroute.post("/clear-cart",async (req,res)=>{
     const {userId} = req.body;
     try{
-        const consumer = await ConsumerSchema.findById(userId);
+        const consumer = await User.findById(userId);
         if(!consumer){
             res.status(404).json({error:'User not found'});
         }

@@ -4,9 +4,13 @@ import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import { signOutFailure, signOutStart, signOutSuccess } from '../redux/slice/UserSlice';
 import { FaStore } from 'react-icons/fa';
+// import { useGetCartQuery } from '../redux/slice/ProductSlice';
+
 
 function Navbar() {
   const { currentUser, loading, error } = useSelector((state) => state.user);
+const id = currentUser?.user?._id;
+
   const isSeller = useSelector((state) => state.user.isSeller);
   const dispatch = useDispatch();
   const [isProductsHovered, setIsProductsHovered] = useState(false);
@@ -40,20 +44,20 @@ function Navbar() {
         <div className='navbar-right'>
           <div className='links-here'>
             <ul>
-              {currentUser && !isSeller && (
-                <>
-                  <li
-                onMouseEnter={() => setIsProfileHovered(true)}
-                onMouseLeave={() => setIsProfileHovered(false)}>
-                <NavLink to='/profile' style={{ color: isProfileHovered ? 'red' : 'white' }}>
-                  Profile
-                </NavLink>
-              </li>
-                  <li>
-                    <NavLink to='/add-to-cart'>Cart</NavLink>
-                  </li>
-                </>
-              )}
+            {currentUser && !isSeller && (
+    <>
+        <li
+            onMouseEnter={() => setIsProfileHovered(true)}
+            onMouseLeave={() => setIsProfileHovered(false)}>
+            <NavLink to='/profile' style={{ color: isProfileHovered ? 'red' : 'white' }}>
+                Profile
+            </NavLink>
+        </li>
+        <li>
+            <Link to={`/cart/${id}`}>Go to Cart</Link>
+        </li>
+    </>
+)}
               
               <li
                     onMouseEnter={() => setIsProductsHovered(true)}

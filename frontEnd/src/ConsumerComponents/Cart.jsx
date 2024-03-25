@@ -1,49 +1,29 @@
-import React from 'react';
-// import { useDispatch } from 'react-redux';
+import {useSelector} from 'react-redux'
 import { Typography, List, ListItem, ListItemText } from '@mui/material';
-
-// Import the fetchProduct action
-
 import { useGetCartQuery } from '../redux/slice/ProductSlice';
 
-
 function Cart() {
-  const {data,isFetching,error} = useGetCartQuery()
-  console.log(data);
- 
-  
-  // const dispatch = useDispatch();
-
-  if(isFetching)return <div>loading...</div>
-  if(error)return <p>error{error}</p>
-  
+ const id = useSelector((state)=>state?.user?.currentUser?.user?._id)
+  const { data, isFetching, error } = useGetCartQuery(id);
+console.log(data?.cart?.items);
+  if (isFetching) return <div>Loading...</div>;
+  if (error) return <p>Error: {error.message}</p>;
 
   return (
     <div style={{ maxWidth: 600, margin: 'auto' }}>
-      
-        <List>
-        {data.products && data.products.map(product => (
-  <div key={product._id}>
-    
-    <List>
-      {product.items && product.items.map((item) => {
-        console.log(item);
-        const { _id, productName, price, photo } = item;
-        return (
-          <ListItem key={_id}>
-            <ListItemText primary={productName} secondary={`$${price}`} />
-          </ListItem>
-        );
-      })}
-    </List>
-  </div>
-))}
+     {data?.cart?.items && data?.cart?.items.map((item)=>{
+      const {productName,price,photo,_id} = item
+      return(
+        <div key={_id}>
+          <p>{productName}</p>
+          <img src={photo} alt="" />
 
-
-        </List>
-     
+        </div>
+      )
+     })}
     </div>
   );
 }
 
 export default Cart;
+

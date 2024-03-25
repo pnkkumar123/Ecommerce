@@ -48,7 +48,7 @@ function App() {
       <Route path='/consumerproducts' element={<ConsumerProducts/>}/>
       <Route path='/consumerproducts/:productId' element={<ConsumerSingleProduct/>}/>
         <Route element={<PrivateConsumerRoute/>}>
-          <Route path='/add-to-cart' element={<Cart/>}/>
+          <Route path='/cart/:id' element={<Cart/>}/>
           <Route path='/consumerprofile' element={<ConsumerProfile/>}/>
           <Route path='/order' element={<Orders/>}/>
         </Route>
