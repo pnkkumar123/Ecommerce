@@ -18,7 +18,7 @@ import ConsumerProducts from './ConsumerComponents/ConsumerProducts'
 import ConsumerSignIn from './ConsumerComponents/ConsumerSignIn'
 import PrivateConsumerRoute from './Components/PrivateConsumerRoute'
 import ConsumerSignUp from './ConsumerComponents/ConsumerSignUp'
-import { useState } from 'react'
+
 import Cart from './ConsumerComponents/Cart'
 import Orders from './ConsumerComponents/Orders'
 import ConsumerProfile from './ConsumerComponents/ConsumerProfile'

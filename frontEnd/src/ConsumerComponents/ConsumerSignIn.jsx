@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import styled from 'styled-components';
 import {
   ConsumerSignInFailure,
   ConsumerSignInStart,
@@ -6,7 +7,7 @@ import {
   
 } from "../redux/slice/UserSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 function ConsumerSignIn() {
   const dispatch = useDispatch();
@@ -44,17 +45,71 @@ function ConsumerSignIn() {
   };
 
   return (
-    <>
-      <div>
-        <h3>Sign In</h3>
-        <form onSubmit={handleSubmit}>
-          <input type="email" onChange={handleInputChange} value={formData.email} name="email" id="email" />
-          <input type="password" onChange={handleInputChange} value={formData.password} name="password" id="password" />
-          <button disabled={loading}>Sign In</button>
-        </form>
-      </div>
-    </>
+    <SignInWrapper>
+      <SignInContainer>
+        <SignInForm onSubmit={handleSubmit}>
+        <SignInTitle>Sign In</SignInTitle>
+
+          <SignInInput placeholder="email" type="email" onChange={handleInputChange} value={formData.email} name="email" id="email" />
+          <SignInInput type="password" placeholder="password" onChange={handleInputChange} value={formData.password} name="password" id="password" />
+          <SignInButton disabled={loading}>Sign In</SignInButton>
+           <p>Dont'have an account? <NavLink to="/consumersignup">Sign Up</NavLink></p>
+        </SignInForm>
+      </SignInContainer>
+    </SignInWrapper>
   );
 }
+const SignInWrapper = styled.div`
+background-size:cover;
+background-position:center;
+min-height:100vh;
+display:flex;
+margin:auto;
+justify-items:center;
+align-items:center;
 
+`;
+const SignInContainer = styled.div`
+background-color:rgba(170,200,244,0.7);
+padding:20px;
+border-radius:8px;
+box-shadow:0 0 10px rgba(111,222,177,0.3);
+width:600px;
+display:flex;
+flex-direction:column;
+align-items:center;
+`;
+const SignInForm = styled.form`
+display:flex;
+flex-direction:column;
+gap:20px;
+
+`;
+const SignInTitle = styled.h1`
+font-size:24px;
+text-align:center
+`;
+const ErrorMessage = styled.p`
+color:red;
+`;
+const SignInInput = styled.input`
+padding:10px;
+box-shadow:0 0 10px rgba(111,222,177,0.3);
+border:1px solid #ccc;
+border-radius:4px;
+`;
+const SignInButton = styled.button`
+padding:10px;
+background-color:#007bff;
+color:#fff;
+border:none;
+border-radius:4px;
+cursor:pointer;
+  
+ &:disabled{
+  opacity:0.8;
+  cursor:not-allowed
+ }
+
+`
 export default ConsumerSignIn;
