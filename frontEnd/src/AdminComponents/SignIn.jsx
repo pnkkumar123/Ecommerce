@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import styled from 'styled-components';
 import {
   SellerSignInFailure,
   SellerSignInSuccess,
@@ -46,11 +47,11 @@ function SignIn() {
   };
 
   return (
-    <>
-      <div>
-        <h2>Sign In</h2>
-        <form onSubmit={handleSubmit}>
-          <input
+    <SignInWrapper>
+      <SignInContainer>
+        <SignInTitle>Sign In</SignInTitle>
+        <SignInForm onSubmit={handleSubmit}>
+          <SignInInput
             type="email"
             name="email"
             id="email"
@@ -58,7 +59,7 @@ function SignIn() {
             onChange={handleChange}
             value={formData.email}
           />
-          <input
+          <SignInInput
             type="password"
             name="password"
             id="password"
@@ -66,11 +67,60 @@ function SignIn() {
             onChange={handleChange}
             value={formData.password}
           />
-          <button disabled={loading} type="submit">Sign In</button>
-        </form>
-      </div>
-    </>
+          <SignInButton disabled={loading} type="submit">Sign In</SignInButton>
+        </SignInForm>
+      </SignInContainer>
+    </SignInWrapper>
   );
 }
+const SignInWrapper = styled.div`
+background-size:cover;
+background-position:center;
+min-height:80vh;
+display:flex;
+margin:auto;
+justify-items:center;
+align-items:center;
+`
+const SignInContainer = styled.div`
+background-color:rgba(170,190,244,0.7)
+padding:20px;
+border-radius:8px;
+box-shadow:0 0 10px rgba(111,222,177,0.3);
+width:600px;
+display:flex;
+flex-direction:column;
+align-items:center;
+`
+const SignInForm = styled.form`
+display:flex;
+flex-direction:column;
+gap:20px;
+`
+const SignInTitle = styled.h1`
+font-size:24px;
+text-align:center;
+`;
+const ErrorMessage = styled.p`
+color:red;
 
+`;
+const SignInInput = styled.input`
+padding:10px;
+box-shadow:0 0 10px rgba(111,222,177,0.3);
+border-radius:4px;
+`;
+const SignInButton = styled.button`
+padding:10px;
+background-color:#007bff;
+color:#fff;
+border:none;
+border-radius:4px;
+cursor:pointer;
+
+&:disabled{
+  opacity:0.8;
+  cursor:not-allowed
+}
+`
 export default SignIn;
