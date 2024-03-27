@@ -51,7 +51,7 @@ function UploadProducts() {
                         return;
                     }
                     dispatch(createProductSuccess(data.product)); // Dispatch createProductSuccess action with the created product
-                    navigate('/products');
+                    navigate(`/products/${userId}`);
                 }
             } catch (error) {
                 setLoading(false);
@@ -112,7 +112,7 @@ function UploadProducts() {
     
             // Dispatch createProductSuccess action with formData and userId
             dispatch(createProductSuccess(formDataWithUserId));
-                navigate("/products")
+            navigate(`/products/${userId}`);
             // No need to navigate here, as the navigation is handled in the useEffect hook
         } catch (error) {
             setLoading(false);

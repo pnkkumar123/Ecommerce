@@ -59,8 +59,30 @@ route.post("/create", async (req, res) => {
         return res.status(500).json({ error: "An error occurred while saving the product." });
     }
 });
-// Get request to retrieve all products
 
+
+route.get("/products/:userId", async (req, res) => {
+    try {
+        const userId = req.params.userId; // Access userId from route parameters
+        
+        // Check if the seller exists
+        const seller = await Seller.findById(userId);
+        if (!seller) {
+            return res.status(404).json({ error: "Seller not found" });
+        }
+        
+        // Fetch products uploaded by the seller
+        const products = await Products.find({ _id: { $in: seller.products } });
+        
+        return res.json({ products });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: "An error occurred while fetching the products." });
+    }
+});
+
+
+// 
 route.get("/products",(req,res)=>{
     Products.find()
     .then(products=>{
@@ -72,20 +94,36 @@ route.get("/products",(req,res)=>{
     })
 })
 
-route.get("/products/:productId", async (req, res) => {
-    const productId = req.params.productId;
-
+route.get("/product/:productId", async (req, res) => {
     try {
-        const product = await Products.findById(productId);
-        if (!product) {
-            return res.status(404).json({ error: "Product not found" });
+        // Find the seller by ID
+        const seller = await Seller.findOne({ _id: req.params._id }).select("-password").populate({
+            path: 'products.productId',
+            model: 'Products',
+            select: 'productName price photo description category quantityAvailable brand color size'
+        });
+        
+        if (!seller) {
+            return res.status(404).json({ error: "Seller not found" });
         }
-        return res.status(200).json({ product });
-    } catch (error) {
-        console.error(error);
-        return res.status(500).json({ error: "An error occurred while retrieving the product" });
+
+        if (!seller.products || seller.products.length === 0) {
+            return res.status(404).json({ error: "Products not available for this seller" });
+        }
+
+        // Remove this line as products are already included in the seller object
+        // res.json({ seller, products: seller.products });
+
+        // Just return the seller object which already contains products
+        res.json({ seller });
+    } catch (err) {
+        console.error("Error finding seller:", err);
+        return res.status(500).json({ error: "Internal Server Error" });
     }
 });
+
+    
+
 route.delete("/products/:productId",(req,res)=>{
     const productId = req.params.productId;
     Products.findByIdAndDelete(productId)
