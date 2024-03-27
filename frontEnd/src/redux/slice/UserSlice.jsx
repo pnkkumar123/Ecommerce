@@ -10,6 +10,9 @@ const userSlice = createSlice({
     name:'user',
     initialState,
     reducers:{
+        addProductsToCurrentUser:(state,action)=>{
+               state.currentUser.products.push(action.payload)
+        },
         setSeller :(state)=>{
             
         },
@@ -57,6 +60,6 @@ const userSlice = createSlice({
         }
     }
 })
-export const {ConsumerSignInFailure,ConsumerSignInStart,ConsumerSignInSuccess,SellerSignInFailure,SellerSignInStart,SellerSignInSuccess,signOutFailure,signOutStart,signOutSuccess} = userSlice.actions;
+export const {ConsumerSignInFailure,addProductsToCurrentUser,ConsumerSignInStart,ConsumerSignInSuccess,SellerSignInFailure,SellerSignInStart,SellerSignInSuccess,signOutFailure,signOutStart,signOutSuccess} = userSlice.actions;
 
 export default userSlice.reducer;

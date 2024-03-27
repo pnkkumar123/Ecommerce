@@ -15,7 +15,7 @@ function ConsumerProducts() {
   const currentUser = useSelector((state) => state.user.currentUser?.user?._id);
   const dispatch = useDispatch();
   const { data, isFetching, error } = useGetProductQuery();
-  
+  console.log(data)
   const handleAddToCart = async (productId, productName, price, photo) => {
     try {
       if (!currentUser) {

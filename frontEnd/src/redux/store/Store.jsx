@@ -5,6 +5,7 @@ import { ProductApi } from '../slice/ProductSlice';
 import userReducer from '../slice/UserSlice';
 import filterReducer from '../slice/FilterSlice';
 import cartReducer from '../slice/CartSlice';
+import uploadProductReducer from '../slice/UploadProductSlice'; // Import the uploadProductSlice reducer
 
 // Define persistence configuration
 const persistConfig = {
@@ -16,6 +17,7 @@ const persistConfig = {
 const persistedUserReducer = persistReducer(persistConfig, userReducer);
 const persistedFilterReducer = persistReducer(persistConfig, filterReducer);
 const persistedCartReducer = persistReducer(persistConfig, cartReducer);
+const persistedUploadProductReducer = persistReducer(persistConfig, uploadProductReducer); // Create persisted version of uploadProductSlice reducer
 
 // Configure Redux store
 const store = configureStore({
@@ -23,6 +25,7 @@ const store = configureStore({
     user: persistedUserReducer,
     filter: persistedFilterReducer,
     cart: persistedCartReducer,
+    uploadProduct: persistedUploadProductReducer, // Add uploadProductSlice reducer to the store
     [ProductApi.reducerPath]: ProductApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>

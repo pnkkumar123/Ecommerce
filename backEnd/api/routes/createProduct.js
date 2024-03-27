@@ -1,13 +1,15 @@
 import express from 'express';
 import Products from '../models/Product.js';
+import Seller from '../models/Seller.js';
 
 
 const route = express.Router();
 
 
 
-route.post("/create", (req, res) => {
+route.post("/create", async (req, res) => {
     const {
+        userId,
         productName,
         description,
         price,
@@ -18,35 +20,44 @@ route.post("/create", (req, res) => {
         color,
         size
     } = req.body;
-    if (typeof photo !== 'string') {
-        return res.status(400).json({ error: "Photo must be a string." });
-    }
-
-
-    if (!description  || !productName || !price || !photo|| !category || !brand || !quantityAvailable ||  !color || !size) {
-        return res.status(400).json({ error: "Please provide all required fields." });
-    }
-
-    const product = new Products({
-        productName,
-        description,
-        price,
-        category,
-        brand,
-        quantityAvailable,
-        photo,
-        color,
-        size
-});
-
-    product.save()
-        .then(result => {
-            return res.status(201).json({ product: result });
-        })
-        .catch(error => {
-            console.error(error);
-            return res.status(500).json({ error: "An error occurred while saving the product." });
+    
+    try {
+        // Check if userId is provided
+        if (!userId) {
+            return res.status(400).json({ message: 'userId is required' });
+        }
+        
+        // Check if the seller exists
+        const seller = await Seller.findById(userId);
+        if (!seller) {
+            return res.status(404).json({ error: "Seller not found" });
+        }
+        
+        // Create the product
+        const product = new Products({
+            productName,
+            description,
+            price,
+            category,
+            brand,
+            quantityAvailable,
+            photo,
+            color,
+            size
         });
+        
+        // Save the product
+        const savedProduct = await product.save();
+        
+        // Add the product to the seller's list of products
+        seller.products.push(savedProduct._id);
+        await seller.save();
+        
+        return res.status(201).json({ product: savedProduct });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: "An error occurred while saving the product." });
+    }
 });
 // Get request to retrieve all products
 
