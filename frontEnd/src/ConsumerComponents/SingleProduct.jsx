@@ -31,9 +31,7 @@
 //             <p>Description: {description}</p>
             
 //             </div>
-//               <Button variant='contained' color='primary'>
-//               <Link to={`/products/${_id}/updateproduct`}>      Update
-//               </Link> </Button>
+//               
 //              {/* Assuming photo is an array */}
 //         </Wrapper>
 //     );

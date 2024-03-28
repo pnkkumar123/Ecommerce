@@ -25,13 +25,13 @@ const ProductApi = createApi({
                  method:'DELETE'
             })
         }),
-        updateProduct:builder.mutation({
-            query:({productId,formData})=>({
-              url:`createProduct/products/${productId}`,
-              method:'PUT',
-              body:formData
-            })
-        })
+        updateProduct: builder.mutation({
+            query: ({ productId, formData, userId }) => ({
+                url: `createProduct/products/${productId}`,
+                method: 'PUT',
+                body: { ...formData, userId }, 
+            }),
+        }),
     })
 
 })

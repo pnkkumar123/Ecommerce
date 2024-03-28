@@ -2,8 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { TextField, InputLabel, Button, CircularProgress } from '@mui/material';
 import { useGetProductIdQuery, useUpdateProductMutation } from '../redux/slice/ProductSlice';
 import {  NavLink, useParams ,useNavigate} from 'react-router-dom';
+import {useSelector} from 'react-redux'
+
 
 function UpdateProduct() {
+    const userId = useSelector((state)=>state?.user?.currentUser?._id)
     const navigate = useNavigate()
     const { productId } = useParams();
     const { data } = useGetProductIdQuery(productId);
@@ -71,7 +74,7 @@ function UpdateProduct() {
         .then(data=>{
             const imageUrl = data.url;
             console.log(imageUrl);
-            setFormData({ ...formData, photo: imageUrl });
+            setFormData({ ...formData, photo: imageUrl});
             setUploading(false)
 
         })
@@ -87,7 +90,7 @@ function UpdateProduct() {
         e.preventDefault();
         try {
             setUploading(true);
-            const response = await updateProduct({ productId, formData });
+            const response = await updateProduct({ productId, formData,userId });
             console.log(response);
             setUploading(false);
             navigate("/products")

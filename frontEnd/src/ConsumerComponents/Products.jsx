@@ -90,6 +90,9 @@ function Products() {
                                     <Button onClick={()=>handleDelete(_id)} variant='contained' color='primary'>
                                      Delete
                                     </Button>
+                                    <Button variant='contained' color='primary'>
+                                      <Link to={`/products/${_id}/updateproduct`}>      Update
+                                      </Link> </Button>
                                 
                             </ProductCard>
                             </Link>

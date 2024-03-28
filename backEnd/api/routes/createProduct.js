@@ -121,6 +121,29 @@ route.get("/product/:productId", async (req, res) => {
         return res.status(500).json({ error: "Internal Server Error" });
     }
 });
+route.put("/products/:productId", async (req, res) => {
+    const productId = req.params.productId;
+    const updatedData = req.body;
+    const userId = req.params.userId; // Assuming you have user information in the request
+
+    try {
+        // Check if the user making the request is the owner of the product
+        const product = await Products.findById(productId);
+        if (!product) {
+            return res.status(404).json({ error: "Product not found" });
+        }
+        if (product.owner !== userId) {
+            return res.status(403).json({ error: "Unauthorized access" });
+        }
+
+        // Update the product
+        const updatedProduct = await Products.findByIdAndUpdate(productId, updatedData, { new: true });
+        res.status(200).json(updatedProduct);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+});
 
     
 
@@ -134,22 +157,7 @@ route.delete("/products/:productId",(req,res)=>{
         console.error(error);
     })
 })
-route.put("/products/:productId", (req, res) => {
-    const productId = req.params.productId;
-    const updatedData = req.body; 
 
-    Products.findByIdAndUpdate(productId, updatedData, { new: true }) // Pass updated data to update the product
-    .then((updatedProduct) => {
-        if (!updatedProduct) {
-            return res.status(404).json({ error: "Product not found" }); // Handle case where product with given ID is not found
-        }
-        res.status(200).json(updatedProduct); // Send back the updated product
-    })
-    .catch((error) => {
-        console.error(error);
-        res.status(500).json({ error: "Internal Server Error" });
-    });
-});
 
 
 export default route;
