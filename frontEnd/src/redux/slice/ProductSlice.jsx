@@ -5,7 +5,7 @@ const ProductApi = createApi({
     baseQuery:fetchBaseQuery({baseUrl: 'http://localhost:5000/'}),
     endpoints:(builder)=>({
         getProduct:builder.query({
-            query: ()=> 'createProduct/products'
+            query: ()=> 'createProduct/consumerproducts'
         }),
         getSellerProduct:builder.query({
             query:(id)=>`createProduct/products/${id}`
@@ -15,7 +15,7 @@ const ProductApi = createApi({
         }),
         
         getProductId:builder.query({
-            query:(productId)=>`createProduct/products/${productId}`,
+            query:(productId)=>`createProduct/consumerproducts/${productId}`,
             method:'GET'
         }),
        

@@ -83,7 +83,7 @@ route.get("/products/:userId", async (req, res) => {
 
 
 // 
-route.get("/products",(req,res)=>{
+route.get("/consumerproducts",(req,res)=>{
     Products.find()
     .then(products=>{
         return res.status(200).json({products})
@@ -94,7 +94,7 @@ route.get("/products",(req,res)=>{
     })
 })
 
-route.get("/product/:productId", async (req, res) => {
+route.get("/consumerproducts/:productId", async (req, res) => {
     try {
         // Find the seller by ID
         const seller = await Seller.findOne({ _id: req.params._id }).select("-password").populate({

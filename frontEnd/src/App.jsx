@@ -6,7 +6,7 @@ import UploadProducts from './AdminComponents/uploadProducts'
 import Products from './ConsumerComponents/Products'
 import SignUp from './AdminComponents/SignUp'
 import SignIn from './AdminComponents/SignIn'
-// import SingleProduct from './ConsumerComponents/SingleProduct'
+import SingleProduct from './ConsumerComponents/SingleProduct'
 import UpdateProduct from './AdminComponents/UpdateProduct'
 import PrivateSellerRoute from './Components/PrivateSellerRoute'
 import SideBar from './AdminComponents/SideBar'
@@ -52,7 +52,7 @@ function App() {
           <Route path='/consumerprofile' element={<ConsumerProfile/>}/>
           <Route path='/order' element={<Orders/>}/>
         </Route>
-     {/* <Route path='/products/:productId' element={<SingleProduct/>}/> */}
+     <Route path='/consumerproducts/:productId' element={<SingleProduct/>}/>
       <Route element={<PrivateSellerRoute/>}>
   
       <Route path='/dashboard' element={<DashBorad/>}/>

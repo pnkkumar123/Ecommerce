@@ -1,29 +1,33 @@
-import React from 'react'
-import styled from 'styled-components'
-import {useSelector,useDispatch} from 'react-redux';
-import { selectedCategoryFilter, setCategoryFilter } from '../redux/slice/FilterSlice';
+import React from 'react';
+import styled from 'styled-components';
 
-
-
-function Filters({categories}) {
-  const selectedCategory = useSelector(selectedCategoryFilter);
-  const dispatch = useDispatch();
-
-  const handleCategoryClick = (category)=>{
-    dispatch(setCategoryFilter(category));
-  };
-  
+function Filters({ categories, onCategoryClick, onClearFilters }) {
   return (
     <div>
-     {
-       categories.map((category,index)=>(
-        <button key={index} onClick={()=>handleCategoryClick(category)}>{category}</button>
-       ))
-     }
-
+     
+      <CategoryList>
+        {categories.map((category, index) => (
+          <Button key={index} onClick={() => onCategoryClick(category)}>{category}</Button>
+        ))}
+      </CategoryList>
+      <Button style={{padding:12,borderRadius:5}} onClick={() => onClearFilters()}>Clear Filters</Button>
     </div>
-  )
+  );
 }
 
+const Button = styled.button`
+  margin-right: 10px;
+  margin:20px;
+  align-items:center;
+  jutify-items:center;
+  
+`;
 
-export default Filters
+
+const CategoryList = styled.div`
+box-shadow: 0 0 10px rgba(111, 222, 177, 0.3);
+  margin-bottom: 20px; /* Add margin to create gap between Clear Filters and category buttons */
+`;
+
+export default Filters;
+
