@@ -1,8 +1,11 @@
 import React from 'react'
 import SideBar from './SideBar'
+import { useGetSellerProductQuery } from '../redux/slice/ProductSlice';
 import {useSelector} from 'react-redux';
 const DashBorad = () => {
   const {currentUser} = useSelector((state)=>state?.user)
+  const id = useSelector((state)=>state?.user?.currentUser?._id)
+  const {data,isFetching,error,refetch} = useGetSellerProductQuery(id)
 
   return (
     <div>
@@ -11,7 +14,7 @@ const DashBorad = () => {
    <p> Email : {currentUser.email}</p>
    </div>
    <div>
-    <p>Products : {currentUser.products.length}</p>
+    <p>Products : {data?.products.length}</p>
    </div>
 
 

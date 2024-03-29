@@ -9,7 +9,8 @@ function UpdateProduct() {
     const userId = useSelector((state)=>state?.user?.currentUser?._id)
     const navigate = useNavigate()
     const { productId } = useParams();
-    const { data } = useGetProductIdQuery(productId);
+    const { data,isFetching,error } = useGetProductIdQuery(productId);
+    console.log(data)
 
     // State to hold form data
     const [formData, setFormData] = useState({
@@ -102,6 +103,7 @@ function UpdateProduct() {
 
     return (
         <div>
+            
             <form onSubmit={handleSubmit}>
                 <div style={{ marginBottom: '16px' }}>
                     <InputLabel htmlFor="productName">Product Name</InputLabel>

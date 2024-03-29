@@ -8,7 +8,7 @@ import styled from 'styled-components';
 
 function Products() {
     const id = useSelector((state)=>state?.user?.currentUser?._id)
-    const {data,isFetching,error} = useGetSellerProductQuery(id)
+    const {data,isFetching,error,refetch} = useGetSellerProductQuery(id)
     console.log(data?.products);
     const navigate = useNavigate();
    
@@ -30,11 +30,11 @@ function Products() {
    }
    
 //    useEffect used for refetching data after completion of delete operation
-//    useEffect(()=>{
+   useEffect(()=>{
  
-//     refetch()
+    refetch()
  
-//    },[refetch])
+   },[refetch])
    
     if (isFetching) return <div>Loading...</div>;
     if (error) return <div>Error: {error.message}</div>;

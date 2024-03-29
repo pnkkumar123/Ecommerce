@@ -7,6 +7,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { addToCart } from '../redux/slice/CartSlice';
 import Filters from './Filters';
 
+
 function ConsumerProducts() {
   const navigate = useNavigate();
   const currentUser = useSelector((state) => state.user.currentUser?.user?._id);
@@ -78,14 +79,15 @@ function ConsumerProducts() {
           {filteredProducts.map((product) => (
             
             <Grid item xs={12} sm={6} md={4} lg={3} key={product._id}>
-              <Link to={`/singlepage/${product._id}`} style={{textDecoration:"none"}}>
               <ProductCard>
-                <ProductImage src={product.photo || "https://img.freepik.com/free-vector/flat-design-no-data-illustration_23-2150527130.jpg?w=740&t=st=1710335455~exp=1710336055~hmac=856ef2a2e754625212837ec6499c88f1a50e2bad53016ba349817b5fa34f1af5"} alt={product.productName} />
+              <Link to={`/singlepage/${product._id}`} style={{textDecoration:"none"}}>
+                <ProductImage src={product.photo ? product.photo : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSdjSlKh-Tk7ADvbDpOnK1NJvPWogPd1QhUxg&usqp=CAU"} alt={product.productName} />
                 <Typography variant='h6'>{product.productName}</Typography>
                 <Typography variant='subtitle1'>Price: ${product.price}</Typography>
                 <Typography variant='body2'>Category: {product.category}</Typography>
                 <Typography variant='body2'>Brand: {product.brand}</Typography>
                 <Typography variant='body2'>Quantity Available: {product.quantityAvailable}</Typography>
+                </Link>
                 {currentUser ? (
                   <Button variant='contained' color='primary' onClick={() => handleAddToCart(product._id, product.productName, product.price, product.photo)}>Add to Cart</Button>
                 ) : (
@@ -94,7 +96,6 @@ function ConsumerProducts() {
                   </Button>
                 )}
               </ProductCard>
-              </Link>
             </Grid>
           ))}
         </Grid>

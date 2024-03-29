@@ -51,7 +51,7 @@ function App() {
       <Route path='/consumerproducts' element={<ConsumerProducts/>}/>
       <Route path='/consumerproducts/:productId' element={<ConsumerSingleProduct/>}/>
         <Route element={<PrivateConsumerRoute/>}>
-          <Route path='/singlepage/:id' element={<SinglePage/>}/>
+          <Route path='/singlepage/:productId' element={<SinglePage/>}/>
           <Route path='/success' element={<Success/>}/>
           <Route path='/cancel' element={<Cancel/>}/>
           <Route path='/consumerprofile' element={<ConsumerProfile/>}/>

@@ -80,7 +80,19 @@ route.get("/products/:userId", async (req, res) => {
         return res.status(500).json({ error: "An error occurred while fetching the products." });
     }
 });
-
+route.get("/consumerproducts/:productId", async (req, res) => {
+    try {
+        const productId = req.params.productId;
+        const product = await Products.findById(productId);
+        if (!product) {
+            return res.status(404).json({ error: "Product not found" });
+        }
+        return res.status(200).json({ product });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: "An error occurred while fetching the product" });
+    }
+});
 
 // 
 route.get("/consumerproducts",(req,res)=>{

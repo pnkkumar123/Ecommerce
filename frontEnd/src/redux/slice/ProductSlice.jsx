@@ -16,7 +16,7 @@ const ProductApi = createApi({
         
         getProductId:builder.query({
             query:(productId)=>`createProduct/consumerproducts/${productId}`,
-            method:'GET'
+           
         }),
        
         deleteProduct:builder.mutation({
