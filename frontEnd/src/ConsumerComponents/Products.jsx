@@ -20,7 +20,7 @@ function Products() {
     .unwrap()
     .then(()=>{
         console.log("product deleted successfully");
-        navigate("/products")
+        navigate(`/products/${id}`)
         refetch()
 
     })
