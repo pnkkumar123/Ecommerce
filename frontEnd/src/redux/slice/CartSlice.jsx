@@ -20,23 +20,43 @@ export const fetchCart = createAsyncThunk(
 const cartSlice = createSlice({
   name: 'cart',
   initialState: {
-    cart: [],
+    items: [], // Changed from cart to items to simplify the state structure
     status: 'idle',
     error: null,
   },
   reducers: {
     addToCart: (state, action) => {
       const { productId, productName, price, photo } = action.payload;
-      const existingItem = state.cart.items.find(item => item.productId === productId);
-      
+      const existingItemIndex = state.items.findIndex(item => item.productId === productId);
+      if (existingItemIndex !== -1) {
+        // If product exists in the cart, update its quantity
+        state.items[existingItemIndex].quantity += 1;
+      } else {
+        // If product doesn't exist, add it to the cart
+        state.items.push({ productId, productName, price, photo, quantity: 1 });
+      }
     },
     removeFromCart: (state, action) => {
       const { productId } = action.payload;
-      state.cart = state.cart.items.filter(item => item.productId !== productId);
+      state.items = state.items.filter(item => item.productId !== productId);
     },
     clearCart: (state) => {
-      state.cart = [];
+      state.items = [];
     },
+    setIncrease:(state,action)=>{
+      const {productId} = action.payload;
+      const item = state.items.find(item=>item.productId === productId)
+       if(item){
+        item.quantity += 1;
+       }
+    } ,
+    setDecrease :(state,action)=>{
+      const {productId} = action.payload;
+      const item = state.items.find(item=>item.productId === productId);
+      if(item && item.quantity > 1){
+        item.quantity -= 1;
+      }
+    } ,
   },
   extraReducers(builder) { 
     builder
@@ -45,7 +65,7 @@ const cartSlice = createSlice({
       })
       .addCase(fetchCart.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        state.cart = action.payload; 
+        state.items = action.payload.items; // Assuming the fetched data structure contains 'items' array
       })
       .addCase(fetchCart.rejected, (state, action) => {
         state.status = 'failed';
@@ -54,5 +74,5 @@ const cartSlice = createSlice({
   },
 });
 
-export const { addToCart, removeFromCart, clearCart } = cartSlice.actions;
+export const { addToCart, setIncrease,setDecrease,removeFromCart, clearCart } = cartSlice.actions;
 export default cartSlice.reducer;

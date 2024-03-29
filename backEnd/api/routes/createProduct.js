@@ -94,33 +94,7 @@ route.get("/consumerproducts",(req,res)=>{
     })
 })
 
-route.get("/consumerproducts/:productId", async (req, res) => {
-    try {
-        // Find the seller by ID
-        const seller = await Seller.findOne({ _id: req.params._id }).select("-password").populate({
-            path: 'products.productId',
-            model: 'Products',
-            select: 'productName price photo description category quantityAvailable brand color size'
-        });
-        
-        if (!seller) {
-            return res.status(404).json({ error: "Seller not found" });
-        }
 
-        if (!seller.products || seller.products.length === 0) {
-            return res.status(404).json({ error: "Products not available for this seller" });
-        }
-
-        // Remove this line as products are already included in the seller object
-        // res.json({ seller, products: seller.products });
-
-        // Just return the seller object which already contains products
-        res.json({ seller });
-    } catch (err) {
-        console.error("Error finding seller:", err);
-        return res.status(500).json({ error: "Internal Server Error" });
-    }
-});
 route.put("/products/:productId", async (req, res) => {
     const productId = req.params.productId;
     const updatedData = req.body;

@@ -23,6 +23,9 @@ import Cart from './ConsumerComponents/Cart'
 import Orders from './ConsumerComponents/Orders'
 import ConsumerProfile from './ConsumerComponents/ConsumerProfile'
 import ConsumerSingleProduct from './ConsumerComponents/ConsumerSingleProduct'
+import Success from './ConsumerComponents/Success'
+import Cancel from './ConsumerComponents/Cancel'
+import SinglePage from './ConsumerComponents/SinglePage'
 
 
 function App() {
@@ -48,7 +51,9 @@ function App() {
       <Route path='/consumerproducts' element={<ConsumerProducts/>}/>
       <Route path='/consumerproducts/:productId' element={<ConsumerSingleProduct/>}/>
         <Route element={<PrivateConsumerRoute/>}>
-          <Route path='/cart/:id' element={<Cart/>}/>
+          <Route path='/singlepage/:id' element={<SinglePage/>}/>
+          <Route path='/success' element={<Success/>}/>
+          <Route path='/cancel' element={<Cancel/>}/>
           <Route path='/consumerprofile' element={<ConsumerProfile/>}/>
           <Route path='/order' element={<Orders/>}/>
         </Route>

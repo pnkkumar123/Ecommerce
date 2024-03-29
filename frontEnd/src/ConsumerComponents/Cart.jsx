@@ -1,6 +1,7 @@
 import {useSelector} from 'react-redux'
 import styled,{keyframes} from 'styled-components';
 import { useGetCartQuery } from '../redux/slice/ProductSlice';
+import {loadStripe} from '@stripe/stripe-js';
 
 function Cart() {
  const id = useSelector((state)=>state?.user?.currentUser?.user?._id)
@@ -8,6 +9,37 @@ function Cart() {
 console.log(data?.cart?.items);
   if (isFetching) return <LoadingSpinner/>;
   if (error) return <p>Error: {error.message}</p>;
+ 
+  const makePayment = async () => {
+    if (!data?.cart?.items || data.cart.items.length === 0) {
+      console.error('Cart is empty');
+      return;
+    }
+  
+    const stripe = await loadStripe('pk_test_...');
+    const body = {
+      products: data.cart.items
+    };
+    const headers = {
+      "Content-Type": "application/json"
+    };
+    try {
+      const response = await fetch("http://localhost:5000/consumer/create-checkout-session", {
+        method: "POST",
+        headers: headers,
+        body: JSON.stringify(body)
+      });
+      const session = await response.json();
+      const result = await stripe.redirectToCheckout({
+        sessionId: session.sessionId // Change to session.sessionId
+      });
+      if (result.error) {
+        console.error(result.error);
+      }
+    } catch (error) {
+      console.error('Error occurred:', error);
+    }
+  };
 
   return (
     <CartContainer>
@@ -22,8 +54,10 @@ console.log(data?.cart?.items);
           </div>
 
         </CartItem>
+
       )
      })}
+     <button onClick={makePayment}>CheckOut</button>
     </CartContainer>
   );
 }

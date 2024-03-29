@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import styled from 'styled-components';
 import { useGetProductQuery } from '../redux/slice/ProductSlice';
 import { Grid, Typography, Button } from '@mui/material';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { addToCart } from '../redux/slice/CartSlice';
 import Filters from './Filters';
@@ -76,7 +76,9 @@ function ConsumerProducts() {
         <Typography variant="h1">Products</Typography>
         <Grid container spacing={2}>
           {filteredProducts.map((product) => (
+            
             <Grid item xs={12} sm={6} md={4} lg={3} key={product._id}>
+              <Link to={`/singlepage/${product._id}`} style={{textDecoration:"none"}}>
               <ProductCard>
                 <ProductImage src={product.photo || "https://img.freepik.com/free-vector/flat-design-no-data-illustration_23-2150527130.jpg?w=740&t=st=1710335455~exp=1710336055~hmac=856ef2a2e754625212837ec6499c88f1a50e2bad53016ba349817b5fa34f1af5"} alt={product.productName} />
                 <Typography variant='h6'>{product.productName}</Typography>
@@ -92,6 +94,7 @@ function ConsumerProducts() {
                   </Button>
                 )}
               </ProductCard>
+              </Link>
             </Grid>
           ))}
         </Grid>

@@ -4,7 +4,10 @@ import bcryptjs from 'bcryptjs'
 import Products from '../models/Product.js'
 import jwt from 'jsonwebtoken'
 import Cart from '../models/Cart.js'
+import {Stripe} from 'stripe';
 
+import dotenv from 'dotenv'
+dotenv.config()
 
 const consumerroute = express.Router()
 
@@ -105,7 +108,7 @@ consumerroute.post('/add-to-cart', async (req, res) => {
 
 consumerroute.get("/cart/:id", (req, res) => {
   // Find the user by ID
- User.findOne({ _id: req.params.id }) // Changed from User to User
+ User.findOne({ _id: req.params.userId }) // Changed from User to User
       .select("-password")
       .then(user => {
           if (!user) {
@@ -169,4 +172,57 @@ consumerroute.post("/clear-cart",async (req,res)=>{
         res.status(500).json({eror:'Server error'})
     }
 })
+
+const stripeSecret = process.env.STRIPE_SECRET;
+const stripeInstance = new Stripe(stripeSecret, {
+  apiVersion: '2020-08-27', // or your desired version
+});
+
+consumerroute.post("/create-checkout-session", async (req, res) => {
+    try {
+      const { products } = req.body;
+      console.log(req.body.products)
+      
+      // Convert products into lineItems format
+      const lineItems = products.map(product => {
+        console.log("Product:", product);
+        if (!product || typeof product.price !== 'number' || isNaN(product.price)) {
+          console.error("Invalid product data:", product);
+          return null; // Or handle the error accordingly
+        }
+      
+        const unitAmount = product.price * 100;
+        console.log("Unit amount:", unitAmount);
+      
+        return {
+          price_data: {
+            currency: "inr",
+            product_data: {
+              name: product.productName,
+             
+            },
+            unit_amount: unitAmount,
+          },
+          quantity: 1
+        };
+      }).filter(Boolean); // Filter out any null values
+      
+      console.log("Line items:", lineItems);
+      
+      // Create checkout session with lineItems
+      const session = await stripeInstance.checkout.sessions.create({
+        payment_method_types: ["card"],
+        line_items: lineItems,
+        mode: 'payment',
+        success_url: "http://localhost:5173/success", // Change to your success URL
+        cancel_url: "http://localhost:5173/cancel" // Change to your cancel URL
+      });
+      
+      // Return the session ID to the client
+      res.json({ sessionId: session.id });
+    } catch (error) {
+      console.error("Error creating checkout session:", error);
+      res.status(500).json({ error: "Error creating checkout session" });
+    }
+  });
 export default consumerroute
