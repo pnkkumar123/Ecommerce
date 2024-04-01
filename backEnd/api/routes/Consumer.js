@@ -9,8 +9,10 @@ import {Stripe} from 'stripe';
 import dotenv from 'dotenv'
 dotenv.config()
 
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+  apiVersion: '2020-08-27', // Specify the Stripe API version
+});
 const consumerroute = express.Router()
-
 
 consumerroute.post("/signup",async(req,res)=>{
     const {name,userName,password,email} = req.body;
@@ -63,7 +65,7 @@ consumerroute.post("/signin", async (req, res, next) => {
 
 consumerroute.post('/add-to-cart', async (req, res) => {
   try {
-    const { userId, productId, productName, price, photo } = req.body;
+    const { userId, productId, quantity } = req.body;
 
     // Check if userId is provided
     if (!userId) {
@@ -80,16 +82,17 @@ consumerroute.post('/add-to-cart', async (req, res) => {
 
     if (!cart) {
       // If cart doesn't exist, create a new one
-      cart = new Cart({ userId, items: [{ productId, productName, price, photo }] });
+      cart = new Cart({ userId, items: [{ productId, quantity }] });
     } else {
       // Check if the product already exists in the cart
-      const itemIndex = cart.items.findIndex(item => item.productId === productId);
-      if (itemIndex === -1) {
-        // If product doesn't exist, add it to the cart
-        cart.items.push({ productId, productName, price, photo });
+      const existingItemIndex = cart.items.findIndex(item => item.productId === productId);
+
+      if (existingItemIndex !== -1) {
+        // If the product exists, update its quantity
+        cart.items[existingItemIndex].quantity += quantity;
       } else {
-        // If product exists, update its quantity or any other relevant details
-        // For example: cart.items[itemIndex].quantity += 1;
+        // If the product doesn't exist, add it to the cart
+        cart.items.push({ productId, quantity });
       }
     }
 
@@ -102,11 +105,12 @@ consumerroute.post('/add-to-cart', async (req, res) => {
   }
 });
 
+
 // products route
 
 
 
-consumerroute.get("/cart/:id", (req, res) => {
+consumerroute.get("/cart/:userId", (req, res) => {
   // Find the user by ID
  User.findOne({ _id: req.params.userId }) // Changed from User to User
       .select("-password")
@@ -115,7 +119,7 @@ consumerroute.get("/cart/:id", (req, res) => {
               return res.status(404).json({ error: "User not found" });
           }
           // Find the cart items for the user
-          Cart.findOne({ userId: req.params.id })
+          Cart.findOne({ userId: req.params.userId })
               .populate({
                   path: 'items.productId',
                   model: 'Products', // Assuming 'Product' is the name of your product model
@@ -141,88 +145,107 @@ consumerroute.get("/cart/:id", (req, res) => {
        
 
 
-consumerroute.post("/remove-from-cart",async (req,res)=>{
-    const {userId,productId} = req.body;
-    try{
-        const consumer = await User.findById(userId);
-        if(!consumer){
-            return res.status(404).json({error:"User not found"});
-        }
-        // remove the productId from the user's cart
-        consumer.cart = consumer.cart.filter(item=>item.toString() !== productId);
-        await consumer.save();
-        res.json({message:'Product removed from cart successfully'})
-    }catch(error){
-        console.error(error);
-        res.status(500).json({error:"Server error"})
+consumerroute.delete("/cart/:userId/:itemId", async (req, res) => {
+  const { userId, itemId } = req.params;
+
+  try {
+    const result = await Cart.updateOne(
+      { userId },
+      { $pull: { items: { _id: itemId } } }
+    );
+
+    if (result.nModified === 0) {
+      return res.status(404).send("Item not found in the cart");
     }
-})
-consumerroute.post("/clear-cart",async (req,res)=>{
-    const {userId} = req.body;
-    try{
-        const consumer = await User.findById(userId);
-        if(!consumer){
-            res.status(404).json({error:'User not found'});
-        }
-        consumer.cart = [];
-        await consumer.save();
-        res.json({message:'Cart cleared successfully'});
-    }catch(error){
-        console.error(error);
-        res.status(500).json({eror:'Server error'})
+
+    res.status(204).send();
+  
+  } catch (e) {
+    console.error("Error deleting item:", e);
+    res.status(500).send("Error deleting item from cart.");
+  }
+});
+
+
+consumerroute.post("/clear-cart/:userId", async (req, res) => {
+  try {
+    const { userId } = req.body;
+
+    // Check if userId is provided
+    if (!userId) {
+      return res.status(400).json({ message: 'userId is required' });
     }
-})
+
+    // Find the user by ID
+    const user = await User.findOne({ _id: userId }).select("-password");
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    let cart = await Cart.findOne({ userId });
+
+    
+   
+      
+  
+        cart.items = [];
+        await cart.save()
+        res.json({ user, cart });
+    
+
+    // Save the cart
+  
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+
 
 const stripeSecret = process.env.STRIPE_SECRET;
 const stripeInstance = new Stripe(stripeSecret, {
   apiVersion: '2020-08-27', // or your desired version
 });
 
-consumerroute.post("/create-checkout-session", async (req, res) => {
-    try {
-      const { products } = req.body;
-      console.log(req.body.products)
-      
-      // Convert products into lineItems format
-      const lineItems = products.map(product => {
-        console.log("Product:", product);
-        if (!product || typeof product.price !== 'number' || isNaN(product.price)) {
-          console.error("Invalid product data:", product);
-          return null; // Or handle the error accordingly
-        }
-      
-        const unitAmount = product.price * 100;
-        console.log("Unit amount:", unitAmount);
-      
-        return {
-          price_data: {
-            currency: "inr",
-            product_data: {
-              name: product.productName,
-             
-            },
-            unit_amount: unitAmount,
+consumerroute.post('/create-checkout-session', async (req, res) => {
+  try {
+    const { products } = req.body;
+
+    // Convert products into lineItems format
+    const lineItems = products.map((product) => {
+      if (!product || typeof product.price !== 'number' || isNaN(product.price)) {
+        console.error('Invalid product data:', product);
+        return null;
+      }
+
+      const unitAmount = product.price * 100; // Amount in cents
+      return {
+        price_data: {
+          currency: 'usd', // Change to your desired currency
+          product_data: {
+            name: product.productName,
           },
-          quantity: 1
-        };
-      }).filter(Boolean); // Filter out any null values
-      
-      console.log("Line items:", lineItems);
-      
-      // Create checkout session with lineItems
-      const session = await stripeInstance.checkout.sessions.create({
-        payment_method_types: ["card"],
-        line_items: lineItems,
-        mode: 'payment',
-        success_url: "http://localhost:5173/success", // Change to your success URL
-        cancel_url: "http://localhost:5173/cancel" // Change to your cancel URL
-      });
-      
-      // Return the session ID to the client
-      res.json({ sessionId: session.id });
-    } catch (error) {
-      console.error("Error creating checkout session:", error);
-      res.status(500).json({ error: "Error creating checkout session" });
-    }
-  });
+          unit_amount: unitAmount,
+        },
+        quantity: 1,
+      };
+    }).filter(Boolean); // Filter out any null values
+
+    // Create checkout session
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ['card'],
+      line_items: lineItems,
+      mode: 'payment',
+      success_url: 'http://localhost:5173/success', 
+      cancel_url: 'http://localhost:5173/cancel', 
+    });
+
+    // Return the session ID to the client
+    res.json({ sessionId: session.id });
+  } catch (error) {
+    console.error('Error creating checkout session:', error);
+    res.status(500).json({ error: 'Error creating checkout session' });
+  }
+});
 export default consumerroute

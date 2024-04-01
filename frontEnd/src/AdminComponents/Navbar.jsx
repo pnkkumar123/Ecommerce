@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import { signOutFailure, signOutStart, signOutSuccess } from '../redux/slice/UserSlice';
 import { FaStore } from 'react-icons/fa';
+import { CgSearch } from 'react-icons/cg';
 // import { useGetCartQuery } from '../redux/slice/ProductSlice';
 
 
@@ -40,6 +41,10 @@ const id = currentUser?.user?._id;
           <Link to='/' className='navbar-logo'>
             Ecommerce
           </Link>
+        </div>
+        <div className="search">
+          <input type="text" name="" id="" />
+          <CgSearch className='icon'/>
         </div>
         <div className='navbar-right'>
           <div className='links-here'>
@@ -123,7 +128,11 @@ const Wrapper = styled.section`
   .links-here ul li {
     margin-right: 20px;
   }
-
+  .search input{
+    width:300px;
+    border-radius:20px;
+  }
+  
   .links-here ul li:last-child {
     margin-right: 0;
   }

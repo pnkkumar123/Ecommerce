@@ -1,48 +1,64 @@
-import React from 'react';
-import { FaTrash } from 'react-icons/fa';
-import CartAmountToggle from './CartAmountToggle';
-import { useSelector, useDispatch } from 'react-redux';
-import { removeFromCart, setDecrease, setIncrease } from '../redux/slice/CartSlice';
+import React from 'react'
+import FormatPrice from './FormatPrice'
 
-const CartItem = ({ item }) => {
-  const dispatch = useDispatch();
+import { FaTrash } from 'react-icons/fa'
+import { useCartContext } from './cartContext'
+import CartAmountToggle from './CartAmountToggle'
+import { useGetCartQuery } from '../redux/slice/ProductSlice'
 
-  const handleRemoveFromCart = (productId) => {
-    dispatch(removeFromCart({ productId }));
-  };
+const CartItem = () => {
+  const id = useSelector((state)=>state?.user?.currentUser?.user?._id)
 
-  const handleDecrease = (productId) => {
-    dispatch(setDecrease({ productId }));
-  };
+  const {data,isFetching,error} = useGetCartQuery(id)
+  console.log(data) 
+    
+    
+    
+    
 
-  const handleIncrease = (productId) => {
-    dispatch(setIncrease({ productId }));
-  };
 
-  return (
-    <div className='cart-heading'>
-      <div className="cart-image">
-        <figure>
-          <img src={item.photo} alt={item.productName} />
-        </figure>
-      </div>
-      <div>
-        <p>{item.productName}</p>
-      </div>
-      <div className="cart-hide">
-        <p>{item.price}</p>
-      </div>
-      <CartAmountToggle
-        amount={item.price}
-        setDecrease={() => handleDecrease(item._id)}
-        setIncrease={() => handleIncrease(item._id)}
-      />
-      <div className="subtotal">
-        <p>{item.price}</p>
-      </div>
-      <div><FaTrash onClick={() => handleRemoveFromCart(item._id)} /></div>
+    return ( 
+    <div className='cart_heading grid grid-five-column'>
+        <div className="cart-image--name">
+            <div>
+                <figure>
+                    <img src={image} alt={id} />
+                </figure>
+            </div>
+            <div>
+                <p>{name}</p>
+                <div className='color-div'>
+                    <p>Color:</p>
+                    <div className='color-style' style={{backgroundColor:color,color:color}}></div>
+                </div>
+            </div>
+        </div>
+        {/* price */}
+        <div className='cart-hide'>
+            <p>
+                <FormatPrice price={price}/>
+            </p>
+        </div>
+        {/* quantity */}
+       
+            <CartAmountToggle
+            amount={amount}
+            setDecrease={()=>setDecrease(id)}
+            setIncrease={()=>setIncrease(id)}
+           
+            />
+
+            {/* subtotal */}
+            <div className="cart-hide">
+                <p><FormatPrice price={price*amount}/></p>
+            </div>
+            <div>
+            <FaTrash className="remove_icon" onClick={()=>removeItem(id)}/>
+            </div>
+        
+
     </div>
-  );
-};
+    )
+}
 
 export default CartItem;

@@ -13,7 +13,7 @@ function ConsumerProducts() {
   const currentUser = useSelector((state) => state.user.currentUser?.user?._id);
   const dispatch = useDispatch();
   const { data, isFetching, error, refetch } = useGetProductQuery();
-  
+  const [quantity,setQuantity] = useState(1)
   const [selectedCategory, setSelectedCategory] = useState(null);
 
   useEffect(() => {
@@ -32,14 +32,21 @@ function ConsumerProducts() {
         navigate('/consumersignin');
         return;
       }
+      
       const userId = currentUser;
+      const existingCartItem = data?.cart?.items.find(item => item.productId === productId);
+      if (existingCartItem) {
+        // If the item already exists in the cart, update its quantity
+        dispatch(updateCartItemQuantity({ itemId: existingCartItem._id, quantity: existingCartItem.quantity + 1 }));
+      } else {
       dispatch(addToCart(productId));
+      }
       const response = await fetch("http://localhost:5000/consumer/add-to-cart", {
         method: "POST",
         headers: {
           "Content-Type": 'application/json',
         },
-        body: JSON.stringify({ userId, productId, productName, price, photo }),
+        body: JSON.stringify({ userId, productId, productName, price, photo,quantity }),
       });
       if (response.ok) {
         console.log("Product added to cart");
@@ -88,8 +95,9 @@ function ConsumerProducts() {
                 <Typography variant='body2'>Brand: {product.brand}</Typography>
                 <Typography variant='body2'>Quantity Available: {product.quantityAvailable}</Typography>
                 </Link>
+                <input type="number" name="" onChange={(e)=>setQuantity(e.target.value)} value={quantity} id="" />
                 {currentUser ? (
-                  <Button variant='contained' color='primary' onClick={() => handleAddToCart(product._id, product.productName, product.price, product.photo)}>Add to Cart</Button>
+                  <Button variant='contained' color='primary' onClick={() => handleAddToCart(product)}>Add to Cart</Button>
                 ) : (
                   <Button variant='contained' color='primary'>
                     <NavLink to='/consumersignin'>Add to Cart</NavLink>

@@ -1,98 +1,111 @@
-import {useSelector} from 'react-redux'
-import styled,{keyframes} from 'styled-components';
-import { useGetCartQuery } from '../redux/slice/ProductSlice';
-import {loadStripe} from '@stripe/stripe-js';
+import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import styled from 'styled-components';
+import { useClearCartMutation, useDeleteCartMutation, useGetCartQuery } from '../redux/slice/ProductSlice';
+import { updateCartTotalItem, updateCartTotalPrice } from '../redux/slice/CartSlice';
+import { FaMinus, FaPlus, FaShoppingBag, FaTrash } from 'react-icons/fa';
+import CartAmountToggle from './CartAmountToggle';
+import FormatPrice from '../Components/FormatPrice';
+
 
 function Cart() {
- const id = useSelector((state)=>state?.user?.currentUser?.user?._id)
-  const { data, isFetching, error } = useGetCartQuery(id);
-console.log(data?.cart?.items);
-  if (isFetching) return <LoadingSpinner/>;
-  if (error) return <p>Error: {error.message}</p>;
+  const dispatch = useDispatch();
  
-  const makePayment = async () => {
-    if (!data?.cart?.items || data.cart.items.length === 0) {
-      console.error('Cart is empty');
-      return;
-    }
+  const userId = useSelector((state) => state?.user?.currentUser?.user?._id);
+  console.log(userId)
+  const { data, isFetching, error, refetch } = useGetCartQuery(userId);
+  const [deleteProduct] = useDeleteCartMutation();
+  const [clearCart] = useClearCartMutation();
+  const [grandTotal, setGrandTotal] = useState(0);
   
-    const stripe = await loadStripe('pk_test_...');
-    const body = {
-      products: data.cart.items
-    };
-    const headers = {
-      "Content-Type": "application/json"
-    };
-    try {
-      const response = await fetch("http://localhost:5000/consumer/create-checkout-session", {
-        method: "POST",
-        headers: headers,
-        body: JSON.stringify(body)
+  const handleDelete = (itemId) => {
+    deleteProduct({ userId, itemId }) // Pass userId and itemId to the delete function
+      .unwrap()
+      .then(() => {
+        console.log("Product deleted successfully");
+        console.log(data?.cart?.items)
+        refetch();
+      })
+      .catch((error) => {
+        console.log("Error deleting product:", error);
       });
-      const session = await response.json();
-      const result = await stripe.redirectToCheckout({
-        sessionId: session.sessionId // Change to session.sessionId
-      });
-      if (result.error) {
-        console.error(result.error);
-      }
-    } catch (error) {
-      console.error('Error occurred:', error);
-    }
   };
+  const handleClearCart = () => {
+    clearCart({ userId })
+      .unwrap()
+      .then(() => {
+        console.log("Cart cleared successfully");
+        refetch();
+      })
+      .catch((error) => {
+        console.log("Error clearing cart:", error);
+      });
+};
+useEffect(() => {
+  if (data?.cart?.items) {
+    let total = 0;
+    data.cart.items.forEach((item) => {
+      const validQuantity = item?.productId?.quantity || item?.quantity || 1;
+      const validPrice = item?.productId?.price || item?.price || 0;
+      const itemTotal = validQuantity * validPrice;
+      total += itemTotal;
+    });
+    setGrandTotal(total);
+  }
+}, [data]);
+
+  useEffect(() => {
+    refetch()
+  }, [refetch]);
+
+  if (isFetching) return <div>Loading...</div>;
+  if (error) return <p>Error: {error.message}</p>;
+  if (data?.cart?.items.length === 0) return <p>No Products Available</p>;
 
   return (
-    <CartContainer>
-     {data?.cart?.items && data?.cart?.items.map((item)=>{
-      const {productName,price,photo,_id} = item
-      return(
-        <CartItem key={_id}>
-          <ProductImage src={photo} alt="" />
-          <div>
-          <p>{productName}</p>
-          <p>Price:${price}</p>
-          </div>
-
-        </CartItem>
-
-      )
-     })}
-     <button onClick={makePayment}>CheckOut</button>
-    </CartContainer>
+    <>
+      <div>
+        {/* Your cart rendering logic */}
+        {
+          data?.cart?.items && data?.cart?.items.map((item) => {
+            console.log(item)
+           
+    
+            // Access the quantity from the productId object
+            const validQuantity = item?.productId?.quantity ? item?.productId?.quantity : item?.quantity || 1;
+        
+            // Ensure price is a valid number, otherwise default to 0
+            const validPrice = item?.productId?.price ? item?.productId?.price : item?.price
+        
+            // Calculate total
+            const total = validQuantity * validPrice;
+            return (
+              <div className='cart_heading grid grid-five-column' key={item._id}>
+               
+                <div>
+                  <p>{item?.productName ? item?.productName : item?.productId?.productName}</p>
+                  <FaTrash className="remove_icon" onClick={() => handleDelete(item._id)} /> 
+                </div>
+                <div className="total">
+                  <p>{total}</p>
+                </div>
+              </div>
+            );
+          })
+        }
+        <button onClick={handleClearCart}>{data?.cart?.items?.length === 0 ? 'No Items Left' : 'Clear Cart'}</button>
+        <FaShoppingBag/>
+        Continue shopping
+      </div>
+      <div className="grandTotal">
+        <p>grandTotal {grandTotal}</p>
+      </div>
+      {/* Other parts of your cart UI */}
+    </>
   );
 }
-const loadingAnimation = keyframes`
-0%{
-  transform:rotate(0deg);
-}
-100%{
-  transform:rotate(360deg);
-}
-`;
-const CartContainer = styled.div`
-max-width:600px;
-margin:auto;'
 
-`
-const CartItem = styled.div`
-display:flex;
-align-items:center;
-margin-bottom:20px;
-`
-const ProductImage = styled.img`
-width:100px;
-height:100px;
-object-fit:cover;
-margin-right:20px;
-`
-const LoadingSpinner = styled.div`
-border:4px solid #f3f3f3;
-border-top:4px solid #3498db;
-border-radius:50%;
-width:30px;
-height:30px;
-animation:${loadingAnimation} 1s linear infinite;
-margin:auto;
-`
 export default Cart;
+
+
 

@@ -1,7 +1,7 @@
 import {Routes,Route} from 'react-router-dom'
 import Navbar from './AdminComponents/Navbar'
 import DashBorad from './AdminComponents/DashBorad'
-
+import './App.css'
 import UploadProducts from './AdminComponents/uploadProducts'
 import Products from './ConsumerComponents/Products'
 import SignUp from './AdminComponents/SignUp'
@@ -26,14 +26,35 @@ import ConsumerSingleProduct from './ConsumerComponents/ConsumerSingleProduct'
 import Success from './ConsumerComponents/Success'
 import Cancel from './ConsumerComponents/Cancel'
 import SinglePage from './ConsumerComponents/SinglePage'
+import { GlobalStyle } from './Components/GlobalStyle'
+import { ThemeProvider } from 'styled-components'
+
 
 
 function App() {
   const {currentUser} = useSelector((state)=>state.user)
   const isSeller = useSelector((state)=>state.user.isSeller)
-
+  const theme = {
+    colors: {
+      bg: "#F6F8FA",
+      footer_bg: "#0a1435",
+      btn: "rgb(98 84 243)",
+      border: "rgba(98,84,243,0.5)",
+      hr: "#fff",
+      gradient: "linear-gradient(0deg,rgb(132 144 255) 0%, rgb(98 189 252) 100%)",
+      shadow: 
+      "rgba(0,0,0,0.02) 0px 1px 3px 0px,rgba(27,31,35,0.16)0px 0px 0px 1px",
+      shadowSupport: "rgba(0,0,0,0.16)0px 1px 4px",
+    },
+    media: {
+      mobile: "768px",
+      tab: "998px",
+    },
+  }
   return (
     <Wrapper>
+      <ThemeProvider theme={theme}>
+      <GlobalStyle/>
   <div className='navabar'>
    <Navbar/>
   
@@ -56,6 +77,8 @@ function App() {
           <Route path='/cancel' element={<Cancel/>}/>
           <Route path='/consumerprofile' element={<ConsumerProfile/>}/>
           <Route path='/order' element={<Orders/>}/>
+          <Route path='/cart/:userId' element={<Cart/>}/>
+         
         </Route>
      <Route path='/consumerproducts/:productId' element={<SingleProduct/>}/>
       <Route element={<PrivateSellerRoute/>}>
@@ -68,6 +91,7 @@ function App() {
       </Route>
     </Routes>
    </div>
+      </ThemeProvider>
     </Wrapper>
   )
 }
