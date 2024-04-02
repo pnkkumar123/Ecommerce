@@ -4,14 +4,14 @@ import bcryptjs from 'bcryptjs'
 import Products from '../models/Product.js'
 import jwt from 'jsonwebtoken'
 import Cart from '../models/Cart.js'
-import {Stripe} from 'stripe';
-
+import Razorpay from 'razorpay'
 import dotenv from 'dotenv'
 dotenv.config()
+import { createOrder } from '../middleWares/PaymentController.js';
+import { payOrder } from '../middleWares/PaymentController.js';
+import { paymentResponse } from '../middleWares/PaymentController.js';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-  apiVersion: '2020-08-27', // Specify the Stripe API version
-});
+
 const consumerroute = express.Router()
 
 consumerroute.post("/signup",async(req,res)=>{
@@ -104,7 +104,7 @@ consumerroute.post('/add-to-cart', async (req, res) => {
     res.status(500).send('Server Error');
   }
 });
-
+    
 
 // products route
 
@@ -201,51 +201,16 @@ consumerroute.post("/clear-cart/:userId", async (req, res) => {
   }
 });
 
-
-
-const stripeSecret = process.env.STRIPE_SECRET;
-const stripeInstance = new Stripe(stripeSecret, {
-  apiVersion: '2020-08-27', // or your desired version
+const razorpayInstance = new Razorpay({
+  key_id: process.env.RAZORPAY_API_KEY,
+  key_secret: process.env.RAZORPAY_API_SECRET,
 });
 
-consumerroute.post('/create-checkout-session', async (req, res) => {
-  try {
-    const { products } = req.body;
-
-    // Convert products into lineItems format
-    const lineItems = products.map((product) => {
-      if (!product || typeof product.price !== 'number' || isNaN(product.price)) {
-        console.error('Invalid product data:', product);
-        return null;
-      }
-
-      const unitAmount = product.price * 100; // Amount in cents
-      return {
-        price_data: {
-          currency: 'usd', // Change to your desired currency
-          product_data: {
-            name: product.productName,
-          },
-          unit_amount: unitAmount,
-        },
-        quantity: 1,
-      };
-    }).filter(Boolean); // Filter out any null values
-
-    // Create checkout session
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
-      line_items: lineItems,
-      mode: 'payment',
-      success_url: 'http://localhost:5173/success', 
-      cancel_url: 'http://localhost:5173/cancel', 
-    });
-
-    // Return the session ID to the client
-    res.json({ sessionId: session.id });
-  } catch (error) {
-    console.error('Error creating checkout session:', error);
-    res.status(500).json({ error: 'Error creating checkout session' });
-  }
+consumerroute.get('/get-razorpay-key', (req, res) => {
+  res.send({ key: process.env.RAZORPAY_API_KEY });
 });
+// Endpoint for initiating Razorpay payment
+consumerroute.post("/create-order", createOrder);
+consumerroute.post('/pay-order', payOrder);
+consumerroute.get('/pay-res', paymentResponse);
 export default consumerroute

@@ -1,24 +1,17 @@
-import mongoose, { Schema } from 'mongoose'
+import mongoose from "mongoose"
 
+export const OrderSchema=mongoose.Schema({
 
-const Order = new mongoose.Schema({
-  consumer:{type:Schema.Types.ObjectId,ref:'Consumer'},
-  products:[{type:Schema.Types.ObjectId,ref:'Product'}],
-  totalAmount:{
-    type:Number,
-    required:true,
-  },
-  shippingAddress:{
-    type:String,
-    required:true,
-  },
-  paymentStatus:{
-    type:String,
-    enum:['Pending','Paid','Cancelled'],
-    default:'Pending',
-  },
+    isPaid:Boolean,
+    amount:Number,
+    razorpay:{
+        order_id:String,
+        payment_id:String,
+        signature:String,
+    },
 
+})
 
-},{timestamps:true})
-const OrderSchema = mongoose.model("Order",Order)
-export default OrderSchema;
+const order=mongoose.model("order",OrderSchema);
+
+export default order;
