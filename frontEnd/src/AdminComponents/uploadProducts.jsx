@@ -6,7 +6,7 @@ import { createProductSuccess, createProductFailed } from '../redux/slice/Upload
 
 function UploadProducts() {
     const userId = useSelector((state) => state?.user?.currentUser?._id);
-    const dispatch = useDispatch(); // Get dispatch function
+    const dispatch = useDispatch(); 
     const navigate = useNavigate();
     const [url, setUrl] = useState("");
     const [formData, setFormData] = useState({
@@ -14,7 +14,7 @@ function UploadProducts() {
         description: '',
         price: 0,
         category: '',
-        photo: '', // Store the image URL here after uploading to Cloudinary
+        photo: '', 
         brand: '',
         quantityAvailable: 0,
         color: '',
@@ -22,7 +22,7 @@ function UploadProducts() {
     });
     const [error, setError] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [uploading, setUploading] = useState(false); // Add state for file uploading
+    const [uploading, setUploading] = useState(false); 
 
     // UseEffect to handle product creation
     useEffect(() => {
@@ -84,16 +84,16 @@ function UploadProducts() {
         })
             .then(response => response.json())
             .then(data => {
-                const imageUrl = data.url; // Get the uploaded image URL from the response
-                console.log("Uploaded image URL:", imageUrl); // Log the URL to the console
+                const imageUrl = data.url; 
+                console.log("Uploaded image URL:", imageUrl); 
                 setUrl(imageUrl); // Set the uploaded image URL
                 setFormData({ ...formData, photo: imageUrl }); // Update the formData object with the URL
-                setUploading(false); // Set uploading state to false when file is uploaded
+                setUploading(false); 
             })
             .catch(error => {
                 console.error("Error uploading file: ", error);
-                setUploading(false); // Set uploading state to false if there's an error
-                dispatch(createProductFailed("Error uploading file")); // Dispatch createProductFailed action with error message
+                setUploading(false); 
+                dispatch(createProductFailed("Error uploading file")); 
             });
     };
 
@@ -113,7 +113,7 @@ function UploadProducts() {
             // Dispatch createProductSuccess action with formData and userId
             dispatch(createProductSuccess(formDataWithUserId));
             navigate(`/products/${userId}`);
-            // No need to navigate here, as the navigation is handled in the useEffect hook
+            
         } catch (error) {
             setLoading(false);
             setError(true);

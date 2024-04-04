@@ -2,10 +2,11 @@ import React, { useState, useEffect, useMemo } from 'react';
 import styled from 'styled-components';
 import { useGetProductQuery } from '../redux/slice/ProductSlice';
 import { Grid, Typography, Button } from '@mui/material';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { addToCart } from '../redux/slice/CartSlice';
 import Filters from './Filters';
+
 
 
 function ConsumerProducts() {
@@ -17,7 +18,7 @@ function ConsumerProducts() {
   const [selectedCategory, setSelectedCategory] = useState(null);
 
   useEffect(() => {
-    refetch(); // Refetch products when data changes (e.g., when new products are added)
+    refetch(); 
   }, [refetch]);
 
   const categories = useMemo(() => {
@@ -102,9 +103,9 @@ function ConsumerProducts() {
                 {currentUser ? (
                   <Button variant='contained' color='primary' onClick={() => handleAddToCart(product)}>Add to Cart</Button>
                 ) : (
-                  <Button variant='contained' color='primary'>
-                    <NavLink to='/consumersignin'>Add to Cart</NavLink>
-                  </Button>
+                  <StyleButton variant='contained' color='primary' component={Link} to='/consumersignin'>
+                  Add to Cart
+                </StyleButton>
                 )}
               </ProductCard>
             </Grid>
@@ -116,7 +117,14 @@ function ConsumerProducts() {
 }
 
 // Styled components...
+const StyleButton = styled.button`
+color:white;
+background-color:blue;
+padding:8px;
+text-align:center;
+border-radius:5px;
 
+`
 
 const ProductsContainer = styled.div`
   display: flex;

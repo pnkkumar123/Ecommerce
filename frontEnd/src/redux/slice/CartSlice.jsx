@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-// Define an async thunk action to fetch cart details
 export const fetchCart = createAsyncThunk(
   'cart/fetchCart',
   async (userId, thunkAPI) => {
@@ -20,7 +19,7 @@ export const fetchCart = createAsyncThunk(
 const cartSlice = createSlice({
   name: 'cart',
   initialState: {
-    items: [], // Changed from cart to items to simplify the state structure
+    items: [], 
     status: 'idle',
     totalItem: 0,
     totalPrice: 0,
@@ -37,10 +36,10 @@ const cartSlice = createSlice({
       const { productId, productName, price, photo } = action.payload;
       const existingItemIndex = state.items.findIndex(item => item.productId === productId);
       if (existingItemIndex !== -1) {
-        // If product exists in the cart, update its quantity
+      
         state.items[existingItemIndex].quantity += 1;
       } else {
-        // If product doesn't exist, add it to the cart
+       
         state.items.push({ productId, productName, price, photo, quantity: 1 });
       }
     },
@@ -73,10 +72,10 @@ const cartSlice = createSlice({
     },
     removeFromCart(state, action) {
       const productId = action.payload;
-      // Ensure state.cart and state.cart.items are defined before accessing properties
+  
       if (state.cart && state.cart.items) {
         state.cart.items = state.cart.items.filter(item => item.id !== productId);
-        // Update totalItem and totalPrice based on the updated cart items
+        
         state.totalItem = state.cart.items.reduce((accum, curItem) => accum + curItem.amount, 0);
         state.totalPrice = state.cart.items.reduce((accum, curElem) => accum + curElem.price * curElem.amount, 0);
       }
@@ -114,7 +113,7 @@ const cartSlice = createSlice({
       })
       .addCase(fetchCart.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        state.items = action.payload.items; // Assuming the fetched data structure contains 'items' array
+        state.items = action.payload.items; 
       })
       .addCase(fetchCart.rejected, (state, action) => {
         state.status = 'failed';

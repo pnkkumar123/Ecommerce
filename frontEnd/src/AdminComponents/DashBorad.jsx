@@ -1,5 +1,5 @@
 import React from 'react'
-import SideBar from './SideBar'
+import SideBar from '../Components/SideBar'
 import { useGetSellerProductQuery } from '../redux/slice/ProductSlice';
 import {useSelector} from 'react-redux';
 import styled from 'styled-components'

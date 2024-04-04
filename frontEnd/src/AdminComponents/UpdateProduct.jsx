@@ -25,11 +25,11 @@ function UpdateProduct() {
         photo: ''
     });
 
-    // State to manage loading state
+    
     const [uploading, setUploading] = useState(false);
     const [url, setUrl] = useState("")
 
-    // Mutation hook to update product
+   
     const [updateProduct, { isLoading }] = useUpdateProductMutation();
 
     // Populate form data with fetched product data
