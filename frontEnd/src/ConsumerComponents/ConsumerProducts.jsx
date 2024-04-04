@@ -93,9 +93,12 @@ function ConsumerProducts() {
                 <Typography variant='subtitle1'>Price: ${product.price}</Typography>
                 <Typography variant='body2'>Category: {product.category}</Typography>
                 <Typography variant='body2'>Brand: {product.brand}</Typography>
-                <Typography variant='body2'>Quantity Available: {product.quantityAvailable}</Typography>
+                
                 </Link>
-                <input type="number" name="" onChange={(e)=>setQuantity(e.target.value)} value={quantity} id="" />
+                <div className="quantity">
+                  <label >Quantity : </label>
+                  <input style={{width:"20px",alignItems:"center",justifyItems:"center",margin:"auto"}} type="number" name="" onChange={(e)=>setQuantity(e.target.value)} value={quantity} id="" />
+                </div>
                 {currentUser ? (
                   <Button variant='contained' color='primary' onClick={() => handleAddToCart(product)}>Add to Cart</Button>
                 ) : (
@@ -117,6 +120,15 @@ function ConsumerProducts() {
 
 const ProductsContainer = styled.div`
   display: flex;
+  input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type='number'] {
+  -moz-appearance: textfield; /* Firefox */
+}
 `;
 
 const Sidebar = styled.div`
@@ -149,6 +161,7 @@ const ProductImage = styled.img`
   object-fit: cover;
   border-radius: 5px;
 `;
+
 
 export default ConsumerProducts;
 

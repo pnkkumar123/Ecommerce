@@ -1,12 +1,14 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {useNavigate} from 'react-router-dom';
+
 import { useGetProductQuery,useDeleteProductMutation, useGetProductIdQuery, useGetSellerProductQuery } from '../redux/slice/ProductSlice';
 import { Grid, Card, CardMedia, CardContent, Typography, Button, Chip } from '@mui/material';
 import {useSelector} from 'react-redux'
 import styled from 'styled-components';
 
 function Products() {
+    
     const id = useSelector((state)=>state?.user?.currentUser?._id)
     const {data,isFetching,error,refetch} = useGetSellerProductQuery(id)
     console.log(data?.products);
@@ -44,7 +46,9 @@ function Products() {
 
     return (
         <ProductsContainer>
-            <Typography>Products</Typography>
+           <div className="title">
+           <h2>Products</h2>
+           </div>
            <Content>
            <Grid   container spacing={2} alignItems="stretch">
                 {data.products.map((product) => {
@@ -90,9 +94,11 @@ function Products() {
                                     <Button onClick={()=>handleDelete(_id)} variant='contained' color='primary'>
                                      Delete
                                     </Button>
-                                    <Button variant='contained' color='primary'>
-                                      <Link to={`/products/${_id}/updateproduct`}>      Update
-                                      </Link> </Button>
+                                    <Button sx={{color:"white"}} variant='contained' color='primary'>
+    <Link  to={`/products/${_id}/updateproduct`}>
+      Update
+    </Link>
+  </Button>
                                 
                             </ProductCard>
                             </Link>
@@ -104,12 +110,21 @@ function Products() {
         </ProductsContainer>
     );
 }
+
 const ProductsContainer = styled.div`
-display:flex;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center the items horizontally */
+  padding-top: 20px; /* Add padding to the top */
+  
+  .title {
+    margin-bottom: 20px; /* Add margin bottom to create space between title and content */
+  }
 `;
 const Content = styled.div`
 flex:1;
 padding:20px;
+
 `
 const ProductCard = styled.div`
 display:flex;

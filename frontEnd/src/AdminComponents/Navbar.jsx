@@ -42,10 +42,7 @@ const id = currentUser?.user?._id;
             Ecommerce
           </Link>
         </div>
-        <div className="search">
-          <input type="text" name="" id="" />
-          <CgSearch className='icon'/>
-        </div>
+        
         <div className='navbar-right'>
           <div className='links-here'>
             <ul>
@@ -59,18 +56,12 @@ const id = currentUser?.user?._id;
             </NavLink>
         </li>
         <li>
-            <Link to={`/cart/${id}`}>Go to Cart</Link>
+            <Link to={`/cart/${id}`}>Cart</Link>
         </li>
     </>
 )}
               
-              <li
-                    onMouseEnter={() => setIsProductsHovered(true)}
-                    onMouseLeave={() => setIsProductsHovered(false)}>
-                    <NavLink to='/consumerproducts' style={{ color: isProductsHovered ? 'red' : 'white' }}>
-                      Products
-                    </NavLink>
-                  </li>
+            
             </ul>
           </div>
           <div className='user'>

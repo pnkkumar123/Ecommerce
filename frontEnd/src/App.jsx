@@ -48,12 +48,12 @@ function App() {
   {currentUser && isSeller  ? <SideBar/> : ""}
 
    <Routes>
-        <Route path='/' element={<Home/>}/>
+  
         <Route path='/signin' element={<SignIn/>}/>
         <Route path='/consumersignup' element={<ConsumerSignUp/>}/>
         <Route path='/consumersignin' element={<ConsumerSignIn/>}/>
         <Route path='/signup' element={<SignUp/>}/>
-      <Route path='/consumerproducts' element={<ConsumerProducts/>}/>
+      <Route path='/' element={<ConsumerProducts/>}/>
       <Route path='/consumerproducts/:productId' element={<ConsumerSingleProduct/>}/>
         <Route element={<PrivateConsumerRoute/>}>
           <Route path='/singlepage/:productId' element={<SinglePage/>}/>
@@ -68,7 +68,7 @@ function App() {
       <Route element={<PrivateSellerRoute/>}>
   
       <Route path='/dashboard' element={<DashBorad/>}/>
-      <Route path='/profile' element={<Profile/>}/>
+    
      <Route path='/uploadproducts/:id' element={<UploadProducts/>}/>
      <Route path='/products/:productId/updateproduct' element={<UpdateProduct/>}/>
      <Route path='/products/:id' element={<Products/>}/>

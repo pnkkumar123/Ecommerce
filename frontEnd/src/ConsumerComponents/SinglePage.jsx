@@ -24,24 +24,17 @@ console.log(data);
             </div>
             <div className="product-data">
             <h2>{productName}</h2>
-            <p>Brand: {brand}</p>
+            <h4 >Price: ${price}</h4>
+            <h4>Brand: {brand}</h4>
             <p>Category: {category}</p>
             <p>Color: {color}</p>
-            <p>Price: ${price}</p>
             <p>Quantity Available: {quantityAvailable}</p>
             <p>Size: {size}</p>
             <p>Description: {description}</p>
             
             </div>
-              <div className="Cart">
-                <button> Add to Cart</button>
-              </div>
-              <div className="quantity">
-                <FaMinus onClick={()=>setDecrease(productId)}/>
-                <input type="number" name="" defaultValue={1} id="" />
-                <FaPlus onClick={()=>setIncrease(productId)}/>
-              </div>
-             {/* Assuming photo is an array */}
+            
+            
         </Wrapper>
     );
 }

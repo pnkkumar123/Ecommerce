@@ -2,9 +2,7 @@ import React from 'react';
 import styled from 'styled-components'
 import { Link, NavLink } from 'react-router-dom';
 import { CiHome } from "react-icons/ci";
-import { RiUploadCloudLine } from "react-icons/ri";
-import { CgProfile } from "react-icons/cg";
-import { FaStore } from "react-icons/fa";
+
 import {useSelector} from 'react-redux';
 
 function SideBar() {
@@ -14,11 +12,11 @@ function SideBar() {
     <Wrapper>
       <div className="main">
           <div className="links">
-            <NavLink to='/dashboard'>Dashboard <CiHome /></NavLink>
+            <Link to='/dashboard'>Dashboard <CiHome /></Link>
             <li>
             <Link to={`/uploadproducts/${id}`}>Upload Products</Link>
         </li>
-            <NavLink to='/profile'>Profile <CgProfile /></NavLink>
+            
             <li>
             <Link to={`/products/${id}`}>Products</Link>
         </li>
