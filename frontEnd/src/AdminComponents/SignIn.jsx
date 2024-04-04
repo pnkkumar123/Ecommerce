@@ -5,6 +5,7 @@ import {
   SellerSignInSuccess,
  SellerSignInStart 
 } from "../redux/slice/UserSlice";
+import { NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
@@ -68,6 +69,7 @@ function SignIn() {
             value={formData.password}
           />
           <SignInButton disabled={loading} type="submit">Sign In</SignInButton>
+          <p>Dont'have an account? <NavLink to="/signup">Sign Up</NavLink></p>
         </SignInForm>
       </SignInContainer>
     </SignInWrapper>
@@ -83,7 +85,7 @@ justify-items:center;
 align-items:center;
 `
 const SignInContainer = styled.div`
-background-color:rgba(170,190,244,0.7)
+background-color:rgba(170,200,244,0.7);
 padding:20px;
 border-radius:8px;
 box-shadow:0 0 10px rgba(111,222,177,0.3);

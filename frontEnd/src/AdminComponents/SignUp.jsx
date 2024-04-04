@@ -94,11 +94,11 @@ align-items:center;
 
 `;
 const SignUpContainer = styled.div`
-background-color:rgba(170,190,244,0.7);
+background-color:rgba(170,200,244,0.7);
 padding:20px;
 border-radius:8px;
 box-shadow:0 0 10px rgba(111,222,177,0.3);
-widht:600px;
+width:600px;
 display:flex;
 flex-direction:column;
 align-items:center;
