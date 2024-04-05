@@ -41,8 +41,10 @@ app.get('/api/env', (req, res) => {
     // Return environment variables as JSON
     res.json(envVariables);
   });
-app.use(express.static(path.join(__dirname, '/frontEnd/dist')));
 
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'frontEnd', 'dist', 'index.html'));
-})
+
+
+app.get('*', (req, res) =>
+  res.sendFile(path.resolve('build', 'index.html'))
+);
+
