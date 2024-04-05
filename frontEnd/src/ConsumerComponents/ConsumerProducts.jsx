@@ -42,7 +42,7 @@ function ConsumerProducts() {
       } else {
       dispatch(addToCart(productId));
       }
-      const response = await fetch("http://localhost:5000/consumer/add-to-cart", {
+      const response = await fetch(`${window.location.origin}/consumer/add-to-cart`, {
         method: "POST",
         headers: {
           "Content-Type": 'application/json',

@@ -38,7 +38,7 @@ function SignIn() {
     e.preventDefault();
     try {
       dispatch(SellerSignInStart());
-      const res = await fetch("http://localhost:5000/seller/signin", {
+      const res = await fetch(`${window.location.origin}/seller/signin`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

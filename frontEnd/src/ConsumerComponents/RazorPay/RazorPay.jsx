@@ -6,7 +6,7 @@ function Razorpay() {
   const [orderAmount, setOrderAmount] = useState(0);
   const [orders, setOrders] = useState([]);
 
-  const url = 'http://localhost:8000';
+  const url =(` ${window.location.origin}`);
 
   async function fetchOrders() {
     const { data } = await axios.get(`${url}/pay-res`);
