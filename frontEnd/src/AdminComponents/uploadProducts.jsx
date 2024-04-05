@@ -32,7 +32,7 @@ function UploadProducts() {
                 setError(false);
 
                 if (url) {
-                    const response = await fetch('http://localhost:5000/createProduct/create', {
+                    const response = await fetch('/createProduct/create', {
                         method: "POST",
                         headers: {
                             'Content-Type': 'application/json',

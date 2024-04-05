@@ -4,7 +4,7 @@ export const fetchCart = createAsyncThunk(
   'cart/fetchCart',
   async (userId, thunkAPI) => {
     try {
-      const response = await fetch(`${window.location.origin}/consumer/${userId}`);
+      const response = await fetch(`/consumer/${userId}`);
       if (!response.ok) {
         throw new Error('Failed to fetch cart');
       }

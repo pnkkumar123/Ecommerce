@@ -22,7 +22,7 @@ const ConsumerSignUp = () => {
     try {
       setLoading(true);
       setError(false);
-      const res = await fetch(`${window.location.origin}/consumer/signup`, {
+      const res = await fetch('/consumer/signup', {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
