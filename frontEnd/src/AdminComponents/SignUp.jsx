@@ -78,6 +78,7 @@ function SignUp() {
           id="password"
         />
         <SignUpButton disabled={loading}>{loading ? "Loading..." : "Sign Up"}</SignUpButton>
+        <p>Already have an account? <NavLink to="/signin">Sign In</NavLink></p>
       </SignUpForm>
       </SignUpContainer>
     </SignUpWrapper>

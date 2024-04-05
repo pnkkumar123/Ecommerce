@@ -94,7 +94,7 @@ function UpdateProduct() {
             const response = await updateProduct({ productId, formData,userId });
             console.log(response);
             setUploading(false);
-            navigate("/products")
+            navigate(`/products/${userId}`)
         } catch (error) {
             console.log(error);
             setUploading(false);

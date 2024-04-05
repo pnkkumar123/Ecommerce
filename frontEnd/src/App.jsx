@@ -1,27 +1,28 @@
-import {Routes,Route} from 'react-router-dom'
-import Navbar from './Components/Navbar'
-import DashBorad from './AdminComponents/DashBorad'
-import './App.css'
-import UploadProducts from './AdminComponents/uploadProducts'
-import Products from './AdminComponents/Products'
-import SignUp from './AdminComponents/SignUp'
-import SignIn from './AdminComponents/SignIn'
-import SingleProduct from './AdminComponents/SingleProduct'
-import UpdateProduct from './AdminComponents/UpdateProduct'
-import PrivateSellerRoute from './Components/PrivateSellerRoute'
-import SideBar from './Components/SideBar'
+import {Routes,Route} from 'react-router-dom';
+import Navbar from './Components/Navbar';
 
-import {useSelector} from 'react-redux'
-import styled from 'styled-components'
+import DashBorad from './AdminComponents/DashBorad';
+import './App.css';
+import UploadProducts from './AdminComponents/uploadProducts';
+import Products from './AdminComponents/Products';
+import SignUp from './AdminComponents/SignUp';
+import SignIn from './AdminComponents/SignIn';
+import SingleProduct from './AdminComponents/SingleProduct';
+import UpdateProduct from './AdminComponents/UpdateProduct';
+import PrivateSellerRoute from './Components/PrivateSellerRoute';
+import SideBar from './Components/SideBar';
 
-import ConsumerProducts from './ConsumerComponents/ConsumerProducts'
-import ConsumerSignIn from './ConsumerComponents/ConsumerSignIn'
-import PrivateConsumerRoute from './Components/PrivateConsumerRoute'
-import ConsumerSignUp from './ConsumerComponents/ConsumerSignUp'
+import {useSelector} from 'react-redux';
+import styled from 'styled-components';
 
-import Cart from './ConsumerComponents/Cart'
-import Orders from './ConsumerComponents/Orders'
-import ConsumerProfile from './ConsumerComponents/ConsumerProfile'
+import ConsumerProducts from './ConsumerComponents/ConsumerProducts';
+import ConsumerSignIn from './ConsumerComponents/ConsumerSignIn';
+import PrivateConsumerRoute from './Components/PrivateConsumerRoute';
+import ConsumerSignUp from './ConsumerComponents/ConsumerSignUp';
+
+import Cart from './ConsumerComponents/Cart';
+import Orders from './ConsumerComponents/Orders';
+import ConsumerProfile from './ConsumerComponents/ConsumerProfile';
 
 import Success from './ConsumerComponents/Success'
 import Cancel from './ConsumerComponents/Cancel'
@@ -40,7 +41,7 @@ function App() {
    
   <div className='navabar'>
    <Navbar/>
-  
+
   </div>
 
    <div className='routes'>

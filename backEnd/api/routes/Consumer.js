@@ -65,7 +65,7 @@ consumerroute.post("/signin", async (req, res, next) => {
 
 consumerroute.post('/add-to-cart', async (req, res) => {
   try {
-    const { userId, productId, quantity } = req.body;
+    const { userId, productId, productName, price, photo, quantity } = req.body;
 
     // Check if userId is provided
     if (!userId) {
@@ -82,7 +82,7 @@ consumerroute.post('/add-to-cart', async (req, res) => {
 
     if (!cart) {
       // If cart doesn't exist, create a new one
-      cart = new Cart({ userId, items: [{ productId, quantity }] });
+      cart = new Cart({ userId, items: [{ productId, productName, price, photo, quantity }] });
     } else {
       // Check if the product already exists in the cart
       const existingItemIndex = cart.items.findIndex(item => item.productId === productId);
@@ -92,7 +92,7 @@ consumerroute.post('/add-to-cart', async (req, res) => {
         cart.items[existingItemIndex].quantity += quantity;
       } else {
         // If the product doesn't exist, add it to the cart
-        cart.items.push({ productId, quantity });
+        cart.items.push({ productId, productName, price, photo, quantity });
       }
     }
 
@@ -104,7 +104,7 @@ consumerroute.post('/add-to-cart', async (req, res) => {
     res.status(500).send('Server Error');
   }
 });
-    
+
 
 // products route
 

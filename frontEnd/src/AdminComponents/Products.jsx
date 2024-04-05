@@ -56,7 +56,7 @@ function Products() {
                     const {_id, productName, photo, description, price, category, brand, quantityAvailable, color, size } = product;
                     return (
                         <Grid  item xs={12} sm={6} md={3} key={product._id}>
-                         <Link to={`/products/${product._id}`} style={{textDecoration:'none'}}>
+                         
                             <ProductCard >
                                 <CardMedia
                                     component="img"
@@ -94,14 +94,14 @@ function Products() {
                                     <Button onClick={()=>handleDelete(_id)} variant='contained' color='primary'>
                                      Delete
                                     </Button>
-                                    <Button sx={{color:"white"}} variant='contained' color='primary'>
+                                  
     <Link  to={`/products/${_id}/updateproduct`}>
-      Update
+     <StyleButton>Update</StyleButton>
     </Link>
-  </Button>
+ 
                                 
                             </ProductCard>
-                            </Link>
+                          
                         </Grid>
                     );
                 })}
@@ -121,6 +121,20 @@ const ProductsContainer = styled.div`
     margin-bottom: 20px; /* Add margin bottom to create space between title and content */
   }
 `;
+const StyleButton = styled.button`
+color:black;
+width:100%;
+background-color:orange;
+padding:8px;
+text-align:center;
+border-radius:5px;
+
+&:hover{
+    background-color: red;
+    cursor:pointer;
+}
+
+`
 const Content = styled.div`
 flex:1;
 padding:20px;

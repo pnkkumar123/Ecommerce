@@ -19,6 +19,15 @@ function ConsumerSignIn() {
   });
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
+  };const handleGuestLogin = () => {
+    
+    setFormData({
+      email: "guest@gmail.com",
+      password: "pankaj"
+    });
+
+    // Submit the form
+    handleSubmit();
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -37,7 +46,7 @@ function ConsumerSignIn() {
         dispatch(ConsumerSignInFailure());
         return;
       }
-      navigate('/consumerproducts');
+      navigate('/');
     } catch (e) {
       dispatch(ConsumerSignInFailure(e.message));
       console.log(e);
@@ -53,6 +62,7 @@ function ConsumerSignIn() {
           <SignInInput placeholder="email" type="email" onChange={handleInputChange} value={formData.email} name="email" id="email" />
           <SignInInput type="password" placeholder="password" onChange={handleInputChange} value={formData.password} name="password" id="password" />
           <SignInButton disabled={loading}>Sign In</SignInButton>
+          <SignInButton type="button" onClick={handleGuestLogin}>Guest Login</SignInButton>
            <p>Dont'have an account? <NavLink to="/consumersignup">Sign Up</NavLink></p>
         </SignInForm>
       </SignInContainer>

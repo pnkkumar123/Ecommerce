@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import {toast} from 'react-toastify'
 import styled from 'styled-components';
 import {
   SellerSignInFailure,
@@ -10,7 +11,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 function SignIn() {
+  const name = useSelector((state)=>state?.user?.currentUser?.name)
   const dispatch = useDispatch();
+
   const navigate = useNavigate();
   const { loading, error } = useSelector((state) => state.user);
   const [formData, setFormData] = useState({
@@ -21,7 +24,16 @@ function SignIn() {
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
+  const handleGuestLogin = () => {
+    
+    setFormData({
+      email: "guestuser@gmail.com",
+      password: "pankaj"
+    });
 
+    // Submit the form
+    handleSubmit();
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -35,14 +47,18 @@ function SignIn() {
       });
       const data = await res.json();
       dispatch(SellerSignInSuccess(data));
-      if(data.sucess === false){
+     
+      if(data.sucsess === false){
        dispatch(SellerSignInFailure());
+     
         return;
       }
-
+     
       navigate('/dashboard')
+      
     } catch (error) {
       dispatch(SellerSignInFailure(error));
+   
       console.log(error);
     }
   };
@@ -69,8 +85,10 @@ function SignIn() {
             value={formData.password}
           />
           <SignInButton disabled={loading} type="submit">Sign In</SignInButton>
+          <SignInButton type="button" onClick={handleGuestLogin}>Guest Login</SignInButton>
           <p>Dont'have an account? <NavLink to="/signup">Sign Up</NavLink></p>
         </SignInForm>
+     
       </SignInContainer>
     </SignInWrapper>
   );

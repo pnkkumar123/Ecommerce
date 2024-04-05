@@ -38,7 +38,7 @@ function ConsumerProducts() {
       const existingCartItem = data?.cart?.items.find(item => item.productId === productId);
       if (existingCartItem) {
         // If the item already exists in the cart, update its quantity
-        dispatch(updateCartItemQuantity({ itemId: existingCartItem._id, quantity: existingCartItem.quantity + 1 }));
+        dispatch(updateCartItemQuantity({ itemId: existingCartItem._id + productName, quantity: existingCartItem.quantity + 1 }));
       } else {
       dispatch(addToCart(productId));
       }
@@ -103,9 +103,9 @@ function ConsumerProducts() {
                 {currentUser ? (
                   <Button variant='contained' color='primary' onClick={() => handleAddToCart(product)}>Add to Cart</Button>
                 ) : (
-                  <StyleButton variant='contained' color='primary' component={Link} to='/consumersignin'>
-                  Add to Cart
-                </StyleButton>
+                  <Link to='/consumersignin'><StyleButton>Add to Cart</StyleButton></Link>
+                  
+               
                 )}
               </ProductCard>
             </Grid>

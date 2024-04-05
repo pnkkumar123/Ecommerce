@@ -31,6 +31,7 @@ const ConsumerSignUp = () => {
       });
       const data = await res.json();
       setLoading(false);
+      navigate('/consumersignin')
       if (!data.success) {
         setError(true);
         return;

@@ -68,7 +68,7 @@ const id = currentUser?.user?._id;
             {currentUser ? (
               <span onClick={(e) => handleSignOut(e.target.value)}>signout</span>
             ) : (
-              <NavLink to='/consumersignin'>Log in</NavLink>
+             <li> <NavLink to='/consumersignin'>Consumer</NavLink></li>
             )}
           </div>
           <div className='seller'>
@@ -97,7 +97,9 @@ const Wrapper = styled.section`
     padding: 0 20px;
     height: 60px;
   }
-
+.navbar li{
+  list-style:none
+}
   .navbar-logo {
     color: #ffffff;
     text-decoration: none;
