@@ -29,6 +29,18 @@ app.use("/consumer",consumerroute)
 app.get("/consumer/getkey",(req,res)=>
       res.status(200).json({key:process.env.RAZORPAY_API_KEY})
 )
+app.get('/api/env', (req, res) => {
+    const envVariables = {
+      RAZORPAY_API_KEY: process.env.RAZORPAY_API_KEY,
+      RAZORPAY_API_SECRET_KEY: process.env.RAZORPAY_API_SECRET_KEY,
+      JWT_SECRET: process.env.JWT_SECRET,
+      MONGODB_URI: process.env.MONGODB_URI
+      // Add more variables as needed
+    };
+    
+    // Return environment variables as JSON
+    res.json(envVariables);
+  });
 app.use(express.static(path.join(__dirname, '/frontEnd/dist')));
 
 app.get('*', (req, res) => {
