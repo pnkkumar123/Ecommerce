@@ -15,9 +15,10 @@ mongoose.connect(process.env.MONGODB_URI)
 .catch((error)=>{
     console.log(error);
 })
-const __dirname = path.resolve();
+
 
 const app = express();
+app.use(express.static(path.resolve(__dirname, 'build')));
 app.use(cors())
 app.use(express.json())
 app.listen("5000",()=>{
