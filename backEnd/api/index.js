@@ -5,7 +5,7 @@ import createProduct from './routes/createProduct.js'
 import route from './routes/Auth.js'
 import cors from 'cors';
 import consumerroute from './routes/Consumer.js'
-
+import path from 'path'
 
 dotenv.config()
 
@@ -15,6 +15,7 @@ mongoose.connect(process.env.MONGODB_URI)
 .catch((error)=>{
     console.log(error);
 })
+const __dirname = path.resolve();
 
 const app = express();
 app.use(cors())
@@ -28,3 +29,8 @@ app.use("/consumer",consumerroute)
 app.get("/consumer/getkey",(req,res)=>
       res.status(200).json({key:process.env.RAZORPAY_API_KEY})
 )
+app.use(express.static(path.join(__dirname, '/frontEnd/dist')));
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'frontEnd', 'dist', 'index.html'));
+})
