@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import { signOutFailure, signOutStart, signOutSuccess } from '../redux/slice/UserSlice';
 import { FaStore } from 'react-icons/fa';
-import { CgSearch } from 'react-icons/cg';
+
 // import { useGetCartQuery } from '../redux/slice/ProductSlice';
 
 
@@ -20,7 +20,7 @@ const id = currentUser?.user?._id;
   const handleSignOut = async () => {
     try {
       dispatch(signOutStart());
-      const res = await fetch('http://localhost:5000/seller/signout', {
+      const res = await fetch('/seller/signout', {
         method: 'POST',
       });
       const data = await res.json();

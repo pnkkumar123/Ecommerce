@@ -39,7 +39,7 @@ function App() {
     <Wrapper>
       
    
-  <div className='navabar'>
+  <div className='navbar'>
    <Navbar/>
 
   </div>
