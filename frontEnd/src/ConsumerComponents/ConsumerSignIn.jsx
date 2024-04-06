@@ -26,8 +26,6 @@ function ConsumerSignIn() {
       password: "pankaj"
     });
 
-    // Submit the form
-    handleSubmit();
   };
   const handleSubmit = async (e) => {
     if (e) {
