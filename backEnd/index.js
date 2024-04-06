@@ -10,7 +10,7 @@ const path = require('path');
 
 dotenv.config()
 
-mongoose.connect(process.env.MONGODB_URI)
+mongoose.connect('mongodb+srv://pankajkanwar420:28xNaDFcmcazfe0w@cluster0.zh2vdd9.mongodb.net/?retryWrites=true&w=majority')
 .then(()=>{
     console.log("connected to mongodb")})
 .catch((error)=>{
@@ -34,11 +34,13 @@ res.status(200).json({key:process.env.RAZORPAY_API_KEY})
 const __dirname1 = path.resolve();
 
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname1, "/frontEnd/dist")));
+  app.use(express.static(path.join(__dirname1, "frontEnd", "dist")));
 
   app.get("*", (req, res) =>
     res.sendFile(path.resolve(__dirname1, "frontEnd", "dist", "index.html"))
   );
+
+
 } else {
   app.get("/", (req, res) => {
     res.send("API is running..");
