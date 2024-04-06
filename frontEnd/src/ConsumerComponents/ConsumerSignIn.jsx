@@ -25,7 +25,7 @@ function ConsumerSignIn() {
       email: "guest@gmail.com",
       password: "pankaj"
     });
-
+    handleSubmit()
   };
   const handleSubmit = async (e) => {
     if (e) {

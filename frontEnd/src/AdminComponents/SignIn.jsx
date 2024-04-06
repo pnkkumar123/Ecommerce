@@ -31,7 +31,7 @@ function SignIn() {
       password: "pankaj"
     });
 
-  
+    handleSubmit()
   };
   const handleSubmit = async (e) => {
     if (e) {

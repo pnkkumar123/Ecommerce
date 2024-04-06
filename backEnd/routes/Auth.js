@@ -4,7 +4,9 @@ const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 const route = express.Router();
+
 dotenv.config()
+
 route.post("/signup",async (req,res,next)=>{
     const {userName,email,name,password} = req.body;
      try {
@@ -34,12 +36,12 @@ route.post("/signin",async(req,res,next)=>{
   const {email,password} = req.body;
   try{
     const validUser = await Seller.findOne({email})
-    if (!validUser) {
-      return res.status(400).json({ error: "User not found" });
+  if(!validUser){
+    return next(console.log("error"))
   }
-  
-  if (!validPassword) {
-      return res.status(400).json({ error: "Invalid password" });
+  const validPassword = bcryptjs.compareSync(password,validUser.password)
+  if(!validPassword){
+    return next (console.log("wrong crendential"));
   }
   const {password:hashedPassword,...rest} = validUser._doc;
   const token = jwt.sign({id:validUser._id},process.env.JWT_SECRET)
