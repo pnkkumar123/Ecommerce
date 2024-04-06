@@ -1,17 +1,18 @@
-import mongoose from "mongoose"
+const mongoose = require("mongoose");
 
-export const OrderSchema=mongoose.Schema({
-
-    isPaid:Boolean,
-    amount:Number,
-    razorpay:{
-        order_id:String,
-        payment_id:String,
-        signature:String,
+const OrderSchema = mongoose.Schema({
+    isPaid: Boolean,
+    amount: Number,
+    razorpay: {
+        order_id: String,
+        payment_id: String,
+        signature: String,
     },
+});
 
-})
+const OrderModel = mongoose.model("order", OrderSchema);
 
-const order=mongoose.model("order",OrderSchema);
-
-export default order;
+module.exports = {
+    OrderSchema,
+    OrderModel
+};
