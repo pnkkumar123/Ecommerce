@@ -18,20 +18,36 @@ mongoose.connect(process.env.MONGODB_URI)
 
 
 const app = express();
-app.use(express.static(path.resolve(__dirname, 'build')));
 app.use(cors())
 app.use(express.json())
 app.listen("5000",()=>{
-    console.log("port listed");
+  console.log("port listed");
 })
 app.use("/createProduct",createProduct)
 app.use("/seller",route)
 app.use("/consumer",consumerroute)
 app.get("/consumer/getkey",(req,res)=>
-      res.status(200).json({key:process.env.RAZORPAY_API_KEY})
+res.status(200).json({key:process.env.RAZORPAY_API_KEY})
 )
+// deployment
+const __dirname1 = path.resolve();
+
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname1, "/frontend/build")));
+
+  app.get("*", (req, res) =>
+    res.sendFile(path.resolve(__dirname1, "frontend", "build", "index.html"))
+  );
+} else {
+  app.get("/", (req, res) => {
+    res.send("API is running..");
+  });
+}
+
+// deployment
+
 app.get('/api/env', (req, res) => {
-    const envVariables = {
+  const envVariables = {
       RAZORPAY_API_KEY: process.env.RAZORPAY_API_KEY,
       RAZORPAY_API_SECRET_KEY: process.env.RAZORPAY_API_SECRET_KEY,
       JWT_SECRET: process.env.JWT_SECRET,
@@ -45,7 +61,4 @@ app.get('/api/env', (req, res) => {
 
 
 
-app.get('*', (req, res) =>
-  res.sendFile(path.resolve('build', 'index.html'))
-);
 
