@@ -34,9 +34,9 @@ function SignIn() {
     handleSubmit()
   };
   const handleSubmit = async (e) => {
-    if (e) {
+ 
       e.preventDefault();
-    }
+    
     try {
       dispatch(SellerSignInStart());
       const res = await fetch('/seller/signin', {

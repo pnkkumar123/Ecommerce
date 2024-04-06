@@ -18,9 +18,9 @@ const ConsumerSignUp = () => {
   };
 
   const handleSubmit = async (e) => {
-    if (e) {
+  
       e.preventDefault();
-    }
+ 
     try {
       setLoading(true);
       setError(false);
