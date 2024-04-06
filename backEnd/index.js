@@ -33,7 +33,7 @@ res.status(200).json({key:process.env.RAZORPAY_API_KEY})
 // deployment
 const __dirname1 = path.resolve();
 
-if (process.env.NODE_ENV === "production") {
+if (production === "production") {
   app.use(express.static(path.join(__dirname1, "/frontEnd/dist")));
 
   app.get("*", (req, res) =>
