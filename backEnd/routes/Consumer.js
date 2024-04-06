@@ -4,7 +4,8 @@ const bcryptjs = require('bcryptjs');
 
 const jwt = require('jsonwebtoken');
 const Cart = require('../models/Cart.js');
-const Razorpay = require('razorpay');const dotenv = require('dotenv');
+
+const dotenv = require('dotenv');
 dotenv.config();
 const { createOrder, payOrder, paymentResponse } = require('../middleWares/PaymentController.js');
 
