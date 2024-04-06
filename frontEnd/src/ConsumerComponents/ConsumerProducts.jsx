@@ -52,7 +52,7 @@ function ConsumerProducts() {
       if (response.ok) {
         console.log("Product added to cart");
       } else {
-        console.log('Failed to add product to cart');
+        
       }
     } catch (e) {
       console.log(e);

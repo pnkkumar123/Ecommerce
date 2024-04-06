@@ -11,7 +11,7 @@ function Products() {
     
     const id = useSelector((state)=>state?.user?.currentUser?._id)
     const {data,isFetching,error,refetch} = useGetSellerProductQuery(id)
-    console.log(data?.products);
+  
     const navigate = useNavigate();
    
     const [deleteProduct] = useDeleteProductMutation();
