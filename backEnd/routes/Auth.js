@@ -1,7 +1,7 @@
-import express from 'express';
-import Seller from '../models/Seller.js';
-import bcryptjs from 'bcryptjs'
-import jwt from 'jsonwebtoken'
+const express = require('express');
+const Seller = require('../models/Seller.js');
+const bcryptjs = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 const route = express.Router();
 

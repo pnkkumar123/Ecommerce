@@ -1,4 +1,4 @@
-import Products from "../models/Product";
+const Products = require('../models/Product.js');
 
 
 

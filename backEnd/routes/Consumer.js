@@ -1,16 +1,12 @@
-import express from 'express'
-import User from '../models/Consumer.js'
-import bcryptjs from 'bcryptjs'
-import Products from '../models/Product.js'
-import jwt from 'jsonwebtoken'
-import Cart from '../models/Cart.js'
-import Razorpay from 'razorpay'
-import dotenv from 'dotenv'
-dotenv.config()
-import { createOrder } from '../middleWares/PaymentController.js';
-import { payOrder } from '../middleWares/PaymentController.js';
-import { paymentResponse } from '../middleWares/PaymentController.js';
+const express = require('express');
+const User = require('../models/Consumer.js');
+const bcryptjs = require('bcryptjs');
 
+const jwt = require('jsonwebtoken');
+const Cart = require('../models/Cart.js');
+const Razorpay = require('razorpay');const dotenv = require('dotenv');
+dotenv.config();
+const { createOrder, payOrder, paymentResponse } = require('../middleWares/PaymentController.js');
 
 const consumerroute = express.Router()
 
@@ -201,10 +197,10 @@ consumerroute.post("/clear-cart/:userId", async (req, res) => {
   }
 });
 
-const razorpayInstance = new Razorpay({
-  key_id: process.env.RAZORPAY_API_KEY,
-  key_secret: process.env.RAZORPAY_API_SECRET,
-});
+// const razorpayInstance = new Razorpay({
+//   key_id: process.env.RAZORPAY_API_KEY,
+//   key_secret: process.env.RAZORPAY_API_SECRET,
+// });
 
 consumerroute.get('/get-razorpay-key', (req, res) => {
   res.send({ key: process.env.RAZORPAY_API_KEY });

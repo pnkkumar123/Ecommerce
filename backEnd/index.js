@@ -1,11 +1,12 @@
-import express from 'express'
-import mongoose from 'mongoose'
-import dotenv from 'dotenv'
-import createProduct from './routes/createProduct.js'
-import route from './routes/Auth.js'
-import cors from 'cors';
-import consumerroute from './routes/Consumer.js'
-import path from 'path'
+const express = require('express');
+const mongoose = require('mongoose');
+const dotenv = require('dotenv');
+const createProduct = require('./routes/createProduct.js');
+const route = require('./routes/Auth.js');
+const cors = require('cors');
+const consumerroute = require('./routes/Consumer.js');
+const path = require('path');
+
 
 dotenv.config()
 

@@ -1,6 +1,5 @@
-import Order from "../models/Order.js";
-import Razorpay from "razorpay";
-
+const Order = require("../models/Order.js");
+const Razorpay = require("razorpay");
 
 export const createOrder = (request, response) => {
   try {

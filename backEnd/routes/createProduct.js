@@ -1,6 +1,6 @@
-import express from 'express';
-import Products from '../models/Product.js';
-import Seller from '../models/Seller.js';
+const express = require('express');
+const Products = require('../models/Product.js');
+const Seller = require('../models/Seller.js');
 
 
 const route = express.Router();
