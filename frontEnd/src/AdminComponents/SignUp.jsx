@@ -17,7 +17,9 @@ function SignUp() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    if (e) {
+      e.preventDefault();
+    }
     try {
       setLoading(true);
       setError(false);

@@ -30,7 +30,9 @@ function ConsumerSignIn() {
     handleSubmit();
   };
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    if (e) {
+      e.preventDefault();
+    }
     try {
       dispatch(ConsumerSignInStart());
       const res = await fetch('/consumer/signin', {
