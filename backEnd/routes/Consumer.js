@@ -209,4 +209,4 @@ consumerroute.get('/get-razorpay-key', (req, res) => {
 consumerroute.post("/create-order", createOrder);
 consumerroute.post('/pay-order', payOrder);
 consumerroute.get('/pay-res', paymentResponse);
-export default consumerroute
+module.exports =  consumerroute

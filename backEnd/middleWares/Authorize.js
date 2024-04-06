@@ -17,4 +17,4 @@ const authorizeUpdate = (req,res,next)=>{
         next();
     })
 }
-export default authorizeUpdate
+module.exports =  authorizeUpdate

@@ -146,4 +146,4 @@ route.delete("/products/:productId",(req,res)=>{
 
 
 
-export default route;
+module.exports =  route;
