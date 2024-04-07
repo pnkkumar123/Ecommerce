@@ -93,12 +93,12 @@ function ConsumerProducts() {
                   <ProductImage src={product.photo ? product.photo : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSdjSlKh-Tk7ADvbDpOnK1NJvPWogPd1QhUxg&usqp=CAU"} alt={product.productName} />
                   <Typography variant='h6'>{product.productName}</Typography>
                   <Typography variant='subtitle1'>Price: ${product.price}</Typography>
-                  <Typography variant='body2'>Category: {product.category}</Typography>
+                 
                   <Typography variant='body2'>Brand: {product.brand}</Typography>
                 </Link>
                 <div className="quantity">
                   <label>Quantity : </label>
-                  <QuantityControl>
+                  <div>
                     <button onClick={() => handleQuantityChange(product._id, (quantities[product._id] || 0) - 1)}>-</button>
                     <input
                       type="number"
@@ -106,7 +106,7 @@ function ConsumerProducts() {
                       onChange={(e) => handleQuantityChange(product._id, parseInt(e.target.value))}
                     />
                     <button onClick={() => handleQuantityChange(product._id, (quantities[product._id] || 0) + 1)}>+</button>
-                  </QuantityControl>
+                  </div>
                 </div>
                 {currentUser ? (
                   <Button variant='contained' color='primary' onClick={() => handleAddToCart(product)}>Add to Cart</Button>
@@ -166,22 +166,7 @@ const ProductImage = styled.img`
   border-radius: 5px;
 `;
 
-const QuantityControl = styled.div`
-  display: flex;
-  align-items: center;
-  
-  button {
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    font-size: 1.2rem;
-    padding: 0 5px;
-  }
-  
-  input {
-    width: 50px;
-    text-align: center;
-  }
-`;
+
+
 
 export default ConsumerProducts;
