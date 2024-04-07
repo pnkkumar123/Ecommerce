@@ -7,14 +7,12 @@ import { useSelector, useDispatch } from 'react-redux';
 import { addToCart } from '../redux/slice/CartSlice';
 import Filters from './Filters';
 
-
-
 function ConsumerProducts() {
   const navigate = useNavigate();
   const currentUser = useSelector((state) => state.user.currentUser?.user?._id);
   const dispatch = useDispatch();
   const { data, isFetching, error, refetch } = useGetProductQuery();
-  const [quantity,setQuantity] = useState(1)
+  const [quantities, setQuantities] = useState({}); // State to store quantities for each product
   const [selectedCategory, setSelectedCategory] = useState(null);
 
   useEffect(() => {
@@ -40,23 +38,27 @@ function ConsumerProducts() {
         // If the item already exists in the cart, update its quantity
         dispatch(updateCartItemQuantity({ itemId: existingCartItem._id + productName, quantity: existingCartItem.quantity + 1 }));
       } else {
-      dispatch(addToCart(productId));
+        dispatch(addToCart(productId));
       }
       const response = await fetch('/consumer/add-to-cart', {
         method: "POST",
         headers: {
           "Content-Type": 'application/json',
         },
-        body: JSON.stringify({ userId, productId, productName, price, photo,quantity }),
+        body: JSON.stringify({ userId, productId, productName, price, photo, quantity: quantities[productId] }),
       });
       if (response.ok) {
         console.log("Product added to cart");
       } else {
-        
+        // Handle error if needed
       }
     } catch (e) {
       console.log(e);
     }
+  };
+
+  const handleQuantityChange = (productId, newQuantity) => {
+    setQuantities({ ...quantities, [productId]: newQuantity });
   };
 
   const handleCategoryClick = (category) => {
@@ -85,27 +87,31 @@ function ConsumerProducts() {
         <Typography variant="h1">Products</Typography>
         <Grid container spacing={2}>
           {filteredProducts.map((product) => (
-            
             <Grid item xs={12} sm={6} md={4} lg={3} key={product._id}>
               <ProductCard>
-              <Link to={`/singlepage/${product._id}`} style={{textDecoration:"none"}}>
-                <ProductImage src={product.photo ? product.photo : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSdjSlKh-Tk7ADvbDpOnK1NJvPWogPd1QhUxg&usqp=CAU"} alt={product.productName} />
-                <Typography variant='h6'>{product.productName}</Typography>
-                <Typography variant='subtitle1'>Price: ${product.price}</Typography>
-                <Typography variant='body2'>Category: {product.category}</Typography>
-                <Typography variant='body2'>Brand: {product.brand}</Typography>
-                
+                <Link to={`/singlepage/${product._id}`} style={{textDecoration:"none"}}>
+                  <ProductImage src={product.photo ? product.photo : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSdjSlKh-Tk7ADvbDpOnK1NJvPWogPd1QhUxg&usqp=CAU"} alt={product.productName} />
+                  <Typography variant='h6'>{product.productName}</Typography>
+                  <Typography variant='subtitle1'>Price: ${product.price}</Typography>
+                  <Typography variant='body2'>Category: {product.category}</Typography>
+                  <Typography variant='body2'>Brand: {product.brand}</Typography>
                 </Link>
                 <div className="quantity">
-                  <label >Quantity : </label>
-                  <input style={{width:"20px",alignItems:"center",justifyItems:"center",margin:"auto"}} type="number" name="" onChange={(e)=>setQuantity(e.target.value)} value={quantity} id="" />
+                  <label>Quantity : </label>
+                  <QuantityControl>
+                    <button onClick={() => handleQuantityChange(product._id, (quantities[product._id] || 0) - 1)}>-</button>
+                    <input
+                      type="number"
+                      value={quantities[product._id] || 1}
+                      onChange={(e) => handleQuantityChange(product._id, parseInt(e.target.value))}
+                    />
+                    <button onClick={() => handleQuantityChange(product._id, (quantities[product._id] || 0) + 1)}>+</button>
+                  </QuantityControl>
                 </div>
                 {currentUser ? (
                   <Button variant='contained' color='primary' onClick={() => handleAddToCart(product)}>Add to Cart</Button>
                 ) : (
                   <Link to='/consumersignin'><StyleButton>Add to Cart</StyleButton></Link>
-                  
-               
                 )}
               </ProductCard>
             </Grid>
@@ -118,25 +124,15 @@ function ConsumerProducts() {
 
 // Styled components...
 const StyleButton = styled.button`
-color:white;
-background-color:blue;
-padding:8px;
-text-align:center;
-border-radius:5px;
-
-`
+  color:white;
+  background-color:blue;
+  padding:8px;
+  text-align:center;
+  border-radius:5px;
+`;
 
 const ProductsContainer = styled.div`
   display: flex;
-  input[type='number']::-webkit-inner-spin-button,
-input[type='number']::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-input[type='number'] {
-  -moz-appearance: textfield; /* Firefox */
-}
 `;
 
 const Sidebar = styled.div`
@@ -146,30 +142,46 @@ const Sidebar = styled.div`
 
 const Content = styled.div`
   flex: 1;
-  gap:50px
+  gap:50px;
   padding: 20px;
 `;
 
 const ProductCard = styled.div`
-  width: 200px; /* Set a fixed width for the product card */
-  height: 300px; /* Set product card height to occupy available space */
+  width: 200px;
+  height: 300px;
   border: 1px solid #ddd;
   border-radius: 5px;
-
   padding: 10px;
   margin:40px;
   overflow:hidden;
   display: flex;
   flex-direction: column;
 `;
+
 const ProductImage = styled.img`
   width: 100%;
   height: 150px;
-  bottom:0 /* Set a fixed height for the product image */
+  bottom:0;
   object-fit: cover;
   border-radius: 5px;
 `;
 
+const QuantityControl = styled.div`
+  display: flex;
+  align-items: center;
+  
+  button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    padding: 0 5px;
+  }
+  
+  input {
+    width: 50px;
+    text-align: center;
+  }
+`;
 
 export default ConsumerProducts;
-

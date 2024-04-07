@@ -100,7 +100,7 @@ const buyNow = async()=>{
        
         </div>
         <div className="continue-shopping">
-          <Link to="/consumerproducts">
+          <Link to="/">
             <FaShoppingBag/>
             Continue shopping
           </Link>
