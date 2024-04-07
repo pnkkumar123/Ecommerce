@@ -57,11 +57,9 @@ function ConsumerProducts() {
     }
   };
 
-  const handleQuantityChange = (productId, newQuantity, productName, price, photo) => {
+  const handleQuantityChange = (productId, newQuantity) => {
     setQuantities({ ...quantities, [productId]: newQuantity });
-    handleAddToCart(productId, productName, price, photo, newQuantity);
   };
-  
 
   const handleCategoryClick = (category) => {
     setSelectedCategory(category);
@@ -99,15 +97,14 @@ function ConsumerProducts() {
                   <Typography variant='body2'>Brand: {product.brand}</Typography>
                 </Link>
                 <QuantityContainer>
-  <QuantityButton onClick={() => handleQuantityChange(product._id, (quantities[product._id] || 0) - 1, product.productName, product.price, product.photo)}>-</QuantityButton>
+  <QuantityButton onClick={() => handleQuantityChange(product._id, (quantities[product._id] || 0) - 1)}>-</QuantityButton>
   <QuantityInput
     type="number"
     value={quantities[product._id] || 1}
-    onChange={(e) => handleQuantityChange(product._id, parseInt(e.target.value), product.productName, product.price, product.photo)}
+    onChange={(e) => handleQuantityChange(product._id, parseInt(e.target.value))}
   />
-  <QuantityButton onClick={() => handleQuantityChange(product._id, (quantities[product._id] || 0) + 1, product.productName, product.price, product.photo)}>+</QuantityButton>
+  <QuantityButton onClick={() => handleQuantityChange(product._id, (quantities[product._id] || 0) + 1)}>+</QuantityButton>
 </QuantityContainer>
-
                 
                 {currentUser ? (
                   <Button variant='contained' color='primary' onClick={() => handleAddToCart(product)}>Add to Cart</Button>
