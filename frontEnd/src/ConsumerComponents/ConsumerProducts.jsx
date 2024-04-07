@@ -96,18 +96,16 @@ function ConsumerProducts() {
                  
                   <Typography variant='body2'>Brand: {product.brand}</Typography>
                 </Link>
-                <div className="quantity">
-                  <label>Quantity : </label>
-                  <div>
-                    <button onClick={() => handleQuantityChange(product._id, (quantities[product._id] || 0) - 1)}>-</button>
-                    <input
-                      type="number"
-                      value={quantities[product._id] || 1}
-                      onChange={(e) => handleQuantityChange(product._id, parseInt(e.target.value))}
-                    />
-                    <button onClick={() => handleQuantityChange(product._id, (quantities[product._id] || 0) + 1)}>+</button>
-                  </div>
-                </div>
+                <QuantityContainer>
+  <QuantityButton onClick={() => handleQuantityChange(product._id, (quantities[product._id] || 0) - 1)}>-</QuantityButton>
+  <QuantityInput
+    type="number"
+    value={quantities[product._id] || 1}
+    onChange={(e) => handleQuantityChange(product._id, parseInt(e.target.value))}
+  />
+  <QuantityButton onClick={() => handleQuantityChange(product._id, (quantities[product._id] || 0) + 1)}>+</QuantityButton>
+</QuantityContainer>
+                
                 {currentUser ? (
                   <Button variant='contained' color='primary' onClick={() => handleAddToCart(product)}>Add to Cart</Button>
                 ) : (
@@ -167,6 +165,23 @@ const ProductImage = styled.img`
 `;
 
 
+const QuantityContainer = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const QuantityButton = styled.button`
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  padding: 0 5px;
+`;
+
+const QuantityInput = styled.input`
+  width: 50px;
+  text-align: center;
+`;
 
 
 export default ConsumerProducts;
