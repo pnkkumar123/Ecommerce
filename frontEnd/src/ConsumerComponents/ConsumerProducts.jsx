@@ -13,7 +13,7 @@ function ConsumerProducts() {
   const currentUser = useSelector((state) => state.user.currentUser?.user?._id);
   const dispatch = useDispatch();
   const { data, isFetching, error, refetch } = useGetProductQuery();
-  const [quantities, setQuantities] = useState(1); 
+  const [quantities, setQuantities] = useState({}); 
   const [selectedCategory, setSelectedCategory] = useState(null);
 
   useEffect(() => {
