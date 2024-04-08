@@ -6,14 +6,13 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { addToCart } from '../redux/slice/CartSlice';
 import Filters from './Filters';
-import { FaMinus,FaPlus } from 'react-icons/fa';
 
 function ConsumerProducts() {
   const navigate = useNavigate();
   const currentUser = useSelector((state) => state.user.currentUser?.user?._id);
   const dispatch = useDispatch();
   const { data, isFetching, error, refetch } = useGetProductQuery();
-  const [quantities, setQuantities] = useState({}); 
+  const [quantities, setQuantities] = useState({}); // State to store quantities for each product
   const [selectedCategory, setSelectedCategory] = useState(null);
 
   useEffect(() => {
@@ -26,7 +25,7 @@ function ConsumerProducts() {
     return uniqueCategories;
   }, [data]);
 
-  const handleAddToCart = async (productId, productName, price, photo) => {
+  const handleAddToCart = async (productId, productName, price, photo, quantity) => {
     try {
       if (!currentUser) {
         navigate('/consumersignin');
@@ -46,34 +45,34 @@ function ConsumerProducts() {
         headers: {
           "Content-Type": 'application/json',
         },
-        body: JSON.stringify({ userId, productId, productName, price, photo, quantity: quantities[productId] }),
+        body: JSON.stringify({ userId, productId, productName, price, photo, quantity }),
       });
       if (response.ok) {
         console.log("Product added to cart");
       } else {
-        // Handle error if needed
+        
       }
     } catch (e) {
       console.log(e);
     }
   };
 
-  const setDecrease = (productId) => {
-    const updatedQuantity = Math.max(1, quantities[productId] - 1); 
-    setQuantities(prevQuantities => ({
-      ...prevQuantities,
-      [productId]: updatedQuantity
-    }));
+  const debounce = (func, delay) => {
+    let timeoutId;
+    return function(...args) {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        func.apply(this, args);
+      }, delay);
+    };
   };
-  
-  const setIncrease = (productId) => {
-    const updatedQuantity = Math.min(data?.products?.quantityAvailable, quantities[productId] + 1); // Ensure quantity doesn't exceed available quantity
-    setQuantities(prevQuantities => ({
-      ...prevQuantities,
-      [productId]: updatedQuantity
-    }));
+
+  const debouncedHandleAddToCart = useMemo(() => debounce(handleAddToCart, 500), [handleAddToCart]);
+
+  const handleQuantityChange = (productId, newQuantity, productName, price, photo) => {
+    setQuantities({ ...quantities, [productId]: newQuantity });
+    debouncedHandleAddToCart(productId, productName, price, photo, newQuantity);
   };
-  
 
   const handleCategoryClick = (category) => {
     setSelectedCategory(category);
@@ -111,20 +110,17 @@ function ConsumerProducts() {
                   <Typography variant='body2'>Brand: {product.brand}</Typography>
                 </Link>
                 <QuantityContainer>
-  <button onClick={() => setDecrease(product._id)}>
-    <FaMinus/>
-  </button>
-  <div className='amount-style'>
-    {quantities[product._id] || 1} {/* Display current quantity for the specific product */}
-  </div>
-  <button onClick={() => setIncrease(product._id)}>
-    <FaPlus/>
-  </button>
-</QuantityContainer>
-
+                  <QuantityButton onClick={() => handleQuantityChange(product._id, (quantities[product._id] || 0) - 1, product.productName, product.price, product.photo)}>-</QuantityButton>
+                  <QuantityInput
+                    type="number"
+                    value={quantities[product._id] || 1}
+                    onChange={(e) => handleQuantityChange(product._id, parseInt(e.target.value), product.productName, product.price, product.photo)}
+                  />
+                  <QuantityButton onClick={() => handleQuantityChange(product._id, (quantities[product._id] || 0) + 1, product.productName, product.price, product.photo)}>+</QuantityButton>
+                </QuantityContainer>
                 
                 {currentUser ? (
-                  <Button variant='contained' color='primary' onClick={() => handleAddToCart(product)}>Add to Cart</Button>
+                  <Button variant='contained' color='primary' onClick={() => handleAddToCart(product._id, product.productName, product.price, product.photo, quantities[product._id] || 1)}>Add to Cart</Button>
                 ) : (
                   <Link to='/consumersignin'><StyleButton>Add to Cart</StyleButton></Link>
                 )}
@@ -181,7 +177,6 @@ const ProductImage = styled.img`
   border-radius: 5px;
 `;
 
-
 const QuantityContainer = styled.div`
   display: flex;
   align-items: center;
@@ -199,6 +194,5 @@ const QuantityInput = styled.input`
   width: 50px;
   text-align: center;
 `;
-
 
 export default ConsumerProducts;
