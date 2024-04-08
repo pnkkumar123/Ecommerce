@@ -12,7 +12,7 @@ function ConsumerProducts() {
   const currentUser = useSelector((state) => state.user.currentUser?.user?._id);
   const dispatch = useDispatch();
   const { data, isFetching, error, refetch } = useGetProductQuery();
-  const [quantities, setQuantities] = useState({});
+  const [quantities, setQuantities] = useState({}); // State to store quantities for each product
   const [selectedCategory, setSelectedCategory] = useState(null);
 
   useEffect(() => {
@@ -45,7 +45,7 @@ function ConsumerProducts() {
         dispatch(addToCart(productId));
         console.log("Product added to cart");
       } else {
-       
+        // Handle error if needed
       }
     } catch (e) {
       console.log(e);
@@ -66,7 +66,6 @@ function ConsumerProducts() {
 
   const handleQuantityChange = (productId, newQuantity, productName, price, photo) => {
     setQuantities({ ...quantities, [productId]: newQuantity });
-    debouncedHandleAddToCart(productId, productName, price, photo, newQuantity);
   };
 
   const handleCategoryClick = (category) => {
@@ -126,9 +125,6 @@ function ConsumerProducts() {
     </ProductsContainer>
   );
 }
-
-
-
 
 
 // Styled components...
