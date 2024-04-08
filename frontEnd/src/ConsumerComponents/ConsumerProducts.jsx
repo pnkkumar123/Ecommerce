@@ -6,13 +6,14 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { addToCart } from '../redux/slice/CartSlice';
 import Filters from './Filters';
+import { FaMinus,FaPlus } from 'react-icons/fa';
 
 function ConsumerProducts() {
   const navigate = useNavigate();
   const currentUser = useSelector((state) => state.user.currentUser?.user?._id);
   const dispatch = useDispatch();
   const { data, isFetching, error, refetch } = useGetProductQuery();
-  const [quantities, setQuantities] = useState({}); // State to store quantities for each product
+  const [quantities, setQuantities] = useState(1); 
   const [selectedCategory, setSelectedCategory] = useState(null);
 
   useEffect(() => {
@@ -57,14 +58,12 @@ function ConsumerProducts() {
     }
   };
 
-  const handleQuantityPlusChange = () => {
-    setQuantities(quantities + 1);
-   
-  };
-  const handleQuantityMinusChange = () => {
-    setQuantities(quantities - 1);
-   
-  };
+  const setDecrease = ()=>{
+    quantities > 1 ? setQuantities(quantities - 1) : setQuantities(1); 
+};
+const setIncrease = ()=>{
+   quantities < data?.products?.quantityAvailable ? setQuantities(quantities + 1): setQuantities(data?.products?.quantityAvailable);
+}; 
   
 
   const handleCategoryClick = (category) => {
@@ -103,13 +102,15 @@ function ConsumerProducts() {
                   <Typography variant='body2'>Brand: {product.brand}</Typography>
                 </Link>
                 <QuantityContainer>
-  <QuantityButton onClick={(e) => handleQuantityMinusChange(e.target.value)}>-</QuantityButton>
-  <QuantityInput
-    type="number"
-    value={quantities[product._id] || 1}
-     readOnly
-  />
-  <QuantityButton onClick={(e) => handleQuantityPlusChange(e.target.value)}>+</QuantityButton>
+                <button onClick={()=>setDecrease()}>
+        <FaMinus/>
+      </button>
+      <div className='amount-style'>
+        {quantity}
+      </div>
+      <button onClick={()=>setIncrease()}>
+        <FaPlus/>
+      </button>
 </QuantityContainer>
 
                 
