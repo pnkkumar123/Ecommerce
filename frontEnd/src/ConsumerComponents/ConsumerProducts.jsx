@@ -12,7 +12,7 @@ function ConsumerProducts() {
   const currentUser = useSelector((state) => state.user.currentUser?.user?._id);
   const dispatch = useDispatch();
   const { data, isFetching, error, refetch } = useGetProductQuery();
-  const [quantities, setQuantities] = useState({}); // State to store quantities for each product
+  const [quantities, setQuantities] = useState({});
   const [selectedCategory, setSelectedCategory] = useState(null);
 
   useEffect(() => {
@@ -33,13 +33,6 @@ function ConsumerProducts() {
       }
       
       const userId = currentUser;
-      const existingCartItem = data?.cart?.items.find(item => item.productId === productId);
-      if (existingCartItem) {
-        // If the item already exists in the cart, update its quantity
-        dispatch(updateCartItemQuantity({ itemId: existingCartItem._id + productName, quantity: existingCartItem.quantity + 1 }));
-      } else {
-        dispatch(addToCart(productId));
-      }
       const response = await fetch('/consumer/add-to-cart', {
         method: "POST",
         headers: {
@@ -47,10 +40,12 @@ function ConsumerProducts() {
         },
         body: JSON.stringify({ userId, productId, productName, price, photo, quantity }),
       });
+      
       if (response.ok) {
+        dispatch(addToCart(productId));
         console.log("Product added to cart");
       } else {
-        
+       
       }
     } catch (e) {
       console.log(e);
@@ -106,7 +101,6 @@ function ConsumerProducts() {
                   <ProductImage src={product.photo ? product.photo : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSdjSlKh-Tk7ADvbDpOnK1NJvPWogPd1QhUxg&usqp=CAU"} alt={product.productName} />
                   <Typography variant='h6'>{product.productName}</Typography>
                   <Typography variant='subtitle1'>Price: ${product.price}</Typography>
-                 
                   <Typography variant='body2'>Brand: {product.brand}</Typography>
                 </Link>
                 <QuantityContainer>
@@ -132,6 +126,10 @@ function ConsumerProducts() {
     </ProductsContainer>
   );
 }
+
+
+
+
 
 // Styled components...
 const StyleButton = styled.button`

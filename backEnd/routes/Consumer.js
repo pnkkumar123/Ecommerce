@@ -60,38 +60,39 @@ consumerroute.post("/signin", async (req, res, next) => {
 
 consumerroute.post('/add-to-cart', async (req, res) => {
   try {
-    const { userId, productId, productName, price, photo, quantity } = req.body;
+    const { userId, productId, quantity } = req.body;
 
-    // Check if userId is provided
-    if (!userId) {
-      return res.status(400).json({ message: 'userId is required' });
+    
+    if (!userId || !productId) {
+      return res.status(400).json({ message: 'userId and productId are required' });
     }
 
-    // Find the user by ID
+  
     const user = await User.findOne({ _id: userId }).select("-password");
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
 
+
     let cart = await Cart.findOne({ userId });
 
     if (!cart) {
-      // If cart doesn't exist, create a new one
-      cart = new Cart({ userId, items: [{ productId, productName, price, photo, quantity }] });
+     
+      cart = new Cart({ userId, items: [{ productId, quantity }] });
     } else {
-      // Check if the product already exists in the cart
-      const existingItemIndex = cart.items.findIndex(item => item.productId === productId);
+     
+      const existingItem = cart.items.find(item => item.productId === productId);
 
-      if (existingItemIndex !== -1) {
+      if (existingItem) {
         // If the product exists, update its quantity
-        cart.items[existingItemIndex].quantity += quantity;
+        existingItem.quantity += quantity;
       } else {
         // If the product doesn't exist, add it to the cart
-        cart.items.push({ productId, productName, price, photo, quantity });
+        cart.items.push({ productId, quantity });
       }
     }
 
-    // Save the cart
+    
     await cart.save();
     res.json({ user, cart });
   } catch (err) {
@@ -107,7 +108,7 @@ consumerroute.post('/add-to-cart', async (req, res) => {
 
 consumerroute.get("/cart/:userId", (req, res) => {
   // Find the user by ID
- User.findOne({ _id: req.params.userId }) // Changed from User to User
+ User.findOne({ _id: req.params.userId }) 
       .select("-password")
       .then(user => {
           if (!user) {
@@ -117,8 +118,8 @@ consumerroute.get("/cart/:userId", (req, res) => {
           Cart.findOne({ userId: req.params.userId })
               .populate({
                   path: 'items.productId',
-                  model: 'Products', // Assuming 'Product' is the name of your product model
-                  select: 'productName price photo' // Select the fields you want to populate
+                  model: 'Products',
+                  select: 'productName price photo' 
               })
               .exec()
               .then(cart => {
