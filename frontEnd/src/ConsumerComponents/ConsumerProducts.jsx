@@ -59,7 +59,7 @@ function ConsumerProducts() {
   };
 
   const setDecrease = (productId) => {
-    const updatedQuantity = Math.max(1, quantities[productId] - 1); // Ensure quantity doesn't go below 1
+    const updatedQuantity = Math.max(1, quantities[productId] - 1); 
     setQuantities(prevQuantities => ({
       ...prevQuantities,
       [productId]: updatedQuantity
