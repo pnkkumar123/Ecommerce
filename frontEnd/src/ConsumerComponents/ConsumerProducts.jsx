@@ -106,7 +106,7 @@ const setIncrease = ()=>{
         <FaMinus/>
       </button>
       <div className='amount-style'>
-        {quantity}
+        {quantities}
       </div>
       <button onClick={()=>setIncrease()}>
         <FaPlus/>
