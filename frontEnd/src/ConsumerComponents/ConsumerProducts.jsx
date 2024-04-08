@@ -57,9 +57,13 @@ function ConsumerProducts() {
     }
   };
 
-  const handleQuantityChange = (productId, newQuantity, productName, price, photo) => {
-    setQuantities({ ...quantities, [productId]: newQuantity });
-    handleAddToCart(productId, productName, price, photo, newQuantity);
+  const handleQuantityPlusChange = () => {
+    setQuantities(quantities + 1);
+   
+  };
+  const handleQuantityMinusChange = () => {
+    setQuantities(quantities - 1);
+   
   };
   
 
@@ -99,13 +103,13 @@ function ConsumerProducts() {
                   <Typography variant='body2'>Brand: {product.brand}</Typography>
                 </Link>
                 <QuantityContainer>
-  <QuantityButton onClick={() => handleQuantityChange(product._id, (quantities[product._id] || 0) - 1, product.productName, product.price, product.photo)}>-</QuantityButton>
+  <QuantityButton onClick={(e) => handleQuantityMinusChange(e.target.value)}>-</QuantityButton>
   <QuantityInput
     type="number"
     value={quantities[product._id] || 1}
-    onChange={(e) => handleQuantityChange(product._id, parseInt(e.target.value), product.productName, product.price, product.photo)}
+     readOnly
   />
-  <QuantityButton onClick={() => handleQuantityChange(product._id, (quantities[product._id] || 0) + 1, product.productName, product.price, product.photo)}>+</QuantityButton>
+  <QuantityButton onClick={(e) => handleQuantityPlusChange(e.target.value)}>+</QuantityButton>
 </QuantityContainer>
 
                 
