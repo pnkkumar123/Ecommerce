@@ -58,12 +58,21 @@ function ConsumerProducts() {
     }
   };
 
-  const setDecrease = ()=>{
-    quantities > 1 ? setQuantities(quantities - 1) : setQuantities(1); 
-};
-const setIncrease = ()=>{
-   quantities < data?.products?.quantityAvailable ? setQuantities(quantities + 1): setQuantities(data?.products?.quantityAvailable);
-}; 
+  const setDecrease = (productId) => {
+    const updatedQuantity = Math.max(1, quantities[productId] - 1); // Ensure quantity doesn't go below 1
+    setQuantities(prevQuantities => ({
+      ...prevQuantities,
+      [productId]: updatedQuantity
+    }));
+  };
+  
+  const setIncrease = (productId) => {
+    const updatedQuantity = Math.min(data?.products?.quantityAvailable, quantities[productId] + 1); // Ensure quantity doesn't exceed available quantity
+    setQuantities(prevQuantities => ({
+      ...prevQuantities,
+      [productId]: updatedQuantity
+    }));
+  };
   
 
   const handleCategoryClick = (category) => {
@@ -102,15 +111,15 @@ const setIncrease = ()=>{
                   <Typography variant='body2'>Brand: {product.brand}</Typography>
                 </Link>
                 <QuantityContainer>
-                <button onClick={()=>setDecrease()}>
-        <FaMinus/>
-      </button>
-      <div className='amount-style'>
-        {quantities}
-      </div>
-      <button onClick={()=>setIncrease()}>
-        <FaPlus/>
-      </button>
+  <button onClick={() => setDecrease(product._id)}>
+    <FaMinus/>
+  </button>
+  <div className='amount-style'>
+    {quantities[product._id] || 1} {/* Display current quantity for the specific product */}
+  </div>
+  <button onClick={() => setIncrease(product._id)}>
+    <FaPlus/>
+  </button>
 </QuantityContainer>
 
                 
