@@ -1,4 +1,4 @@
-import {Routes,Route} from 'react-router-dom';
+import {Routes,Route,useLocation} from 'react-router-dom';
 import Navbar from './Components/Navbar';
 
 import DashBorad from './AdminComponents/DashBorad';
@@ -34,6 +34,8 @@ import SinglePage from './ConsumerComponents/SinglePage'
 function App() {
   const {currentUser} = useSelector((state)=>state.user)
   const isSeller = useSelector((state)=>state.user.isSeller)
+  const location = useLocation();
+  const isDashboardPage = location.pathname.startsWith("/dashboard");
  
   return (
     <Wrapper>
@@ -46,7 +48,7 @@ function App() {
 
    <div className='routes'>
   {currentUser && isSeller  ? <SideBar/> : ""}
-
+    {isSeller && isDashboardPage ? <SideBar/> : ""}
    <Routes>
   
         <Route path='/signin' element={<SignIn/>}/>

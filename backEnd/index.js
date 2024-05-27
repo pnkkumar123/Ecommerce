@@ -8,7 +8,8 @@ const consumerroute = require('./routes/Consumer.js');
 const path = require('path');
 
 
-dotenv.config()
+require('dotenv').config();
+
 
 mongoose.connect('mongodb+srv://pankajkanwar420:28xNaDFcmcazfe0w@cluster0.zh2vdd9.mongodb.net/?retryWrites=true&w=majority')
 .then(()=>{
