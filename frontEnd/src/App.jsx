@@ -47,8 +47,8 @@ function App() {
   </div>
 
    <div className='routes'>
-  {currentUser && isSeller  ? <SideBar/> : ""}
-    {isSeller && isDashboardPage ? <SideBar/> : ""}
+  {currentUser && isSeller && isDashboardPage  ? <SideBar/> : ""}
+    
    <Routes>
   
         <Route path='/signin' element={<SignIn/>}/>
